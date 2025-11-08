@@ -1,29 +1,25 @@
+use crate::cli::Cli;
 use anyhow::Context;
 use clap::Parser;
-use snyk_to_md_core::parser::factory::ParserFactory;
+use snyk_to_md_core::ReportProcessorBuilder;
 use std::fs;
-
-use crate::cli::Cli;
-use snyk_to_md_core::markdown::factory::{MarkdownFormat, MarkdownGeneratorFactory};
-use snyk_to_md_core::model::security_report::SecurityReport;
 
 mod cli;
 
 fn main() -> anyhow::Result<()> {
     let cli = Cli::parse();
 
-    println!("🔎 Processing report: {}", cli.input.display());
-    println!("📋 Detected report type: {:?}\n", cli.parser_type);
+    let json_content = fs::read_to_string(&cli.input)
+        .with_context(|| format!("Could not read file: {:?}", cli.input))?;
 
-    let parser = ParserFactory::create_parser(cli.parser_type)?;
-    let report: SecurityReport = parser.parse(&cli.input.to_string_lossy())?;
-
-    println!("📝 Generating report...");
-
-    let markdown_format = MarkdownFormat::CommonMark;
-    let generator = MarkdownGeneratorFactory::create_generator(markdown_format);
-
-    let markdown_report = generator.generate_markdown_report(&report)?;
+    let markdown_report = ReportProcessorBuilder::new()
+        .parser_type(cli.command.into())
+        .markdown_format(cli.format.into())
+        .content(&json_content)
+        .build()
+        .context("Failed to configure the report processor")?
+        .generate()
+        .context("Failed to generate the markdown report")?;
 
     match cli.output {
         Some(output_path) => {

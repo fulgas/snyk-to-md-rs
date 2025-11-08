@@ -1,11 +1,11 @@
 use crate::model::security_report::SecurityReport;
-use crate::parser::Parser;
+use crate::parser::{Parser, ParserError};
 use anyhow::Result;
 
-pub struct SnykCodeParser;
+pub(crate) struct SnykCodeParser;
 
 impl Parser for SnykCodeParser {
-    fn parse<'a>(&self, _: &str) -> Result<SecurityReport<'a>> {
+    fn parse<'a>(&self, _: &str) -> Result<SecurityReport, ParserError> {
         Ok(SecurityReport { projects: vec![] })
     }
 }

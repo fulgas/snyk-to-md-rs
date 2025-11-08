@@ -4,12 +4,18 @@ pub mod error {
     pub struct ConversionError(::std::borrow::Cow<'static, str>);
     impl ::std::error::Error for ConversionError {}
     impl ::std::fmt::Display for ConversionError {
-        fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> Result<(), ::std::fmt::Error> {
+        fn fmt(
+            &self,
+            f: &mut ::std::fmt::Formatter<'_>,
+        ) -> Result<(), ::std::fmt::Error> {
             ::std::fmt::Display::fmt(&self.0, f)
         }
     }
     impl ::std::fmt::Debug for ConversionError {
-        fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> Result<(), ::std::fmt::Error> {
+        fn fmt(
+            &self,
+            f: &mut ::std::fmt::Formatter<'_>,
+        ) -> Result<(), ::std::fmt::Error> {
             ::std::fmt::Debug::fmt(&self.0, f)
         }
     }
@@ -21,6 +27,100 @@ pub mod error {
     impl From<String> for ConversionError {
         fn from(value: String) -> Self {
             Self(value.into())
+        }
+    }
+}
+///`Filtered`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "object",
+///  "properties": {
+///    "ignore": {
+///      "type": "array"
+///    },
+///    "patch": {
+///      "type": "array"
+///    }
+///  }
+///}
+/// ```
+/// </details>
+#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
+pub struct Filtered {
+    #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
+    pub ignore: ::std::vec::Vec<::serde_json::Value>,
+    #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
+    pub patch: ::std::vec::Vec<::serde_json::Value>,
+}
+impl ::std::convert::From<&Filtered> for Filtered {
+    fn from(value: &Filtered) -> Self {
+        value.clone()
+    }
+}
+impl ::std::default::Default for Filtered {
+    fn default() -> Self {
+        Self {
+            ignore: Default::default(),
+            patch: Default::default(),
+        }
+    }
+}
+///`IgnoreSettings`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "object",
+///  "properties": {
+///    "adminOnly": {
+///      "type": "boolean"
+///    },
+///    "disregardFilesystemIgnores": {
+///      "type": "boolean"
+///    },
+///    "reasonRequired": {
+///      "type": "boolean"
+///    }
+///  }
+///}
+/// ```
+/// </details>
+#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
+pub struct IgnoreSettings {
+    #[serde(
+        rename = "adminOnly",
+        default,
+        skip_serializing_if = "::std::option::Option::is_none"
+    )]
+    pub admin_only: ::std::option::Option<bool>,
+    #[serde(
+        rename = "disregardFilesystemIgnores",
+        default,
+        skip_serializing_if = "::std::option::Option::is_none"
+    )]
+    pub disregard_filesystem_ignores: ::std::option::Option<bool>,
+    #[serde(
+        rename = "reasonRequired",
+        default,
+        skip_serializing_if = "::std::option::Option::is_none"
+    )]
+    pub reason_required: ::std::option::Option<bool>,
+}
+impl ::std::convert::From<&IgnoreSettings> for IgnoreSettings {
+    fn from(value: &IgnoreSettings) -> Self {
+        value.clone()
+    }
+}
+impl ::std::default::Default for IgnoreSettings {
+    fn default() -> Self {
+        Self {
+            admin_only: Default::default(),
+            disregard_filesystem_ignores: Default::default(),
+            reason_required: Default::default(),
         }
     }
 }
@@ -36,13 +136,22 @@ pub mod error {
 ///  "required": [
 ///    "org",
 ///    "projectName",
-///    "uniqueCount"
+///    "targetFile",
+///    "uniqueCount",
+///    "vulnerabilities"
 ///  ],
 ///  "properties": {
 ///    "applications": {
 ///      "type": "array",
 ///      "items": {
 ///        "type": "object",
+///        "required": [
+///          "org",
+///          "projectName",
+///          "targetFile",
+///          "uniqueCount",
+///          "vulnerabilities"
+///        ],
 ///        "properties": {
 ///          "dependencyCount": {
 ///            "type": "number"
@@ -57,32 +166,13 @@ pub mod error {
 ///            "type": "boolean"
 ///          },
 ///          "filtered": {
-///            "type": "object",
-///            "properties": {
-///              "ignore": {
-///                "type": "array"
-///              },
-///              "patch": {
-///                "type": "array"
-///              }
-///            }
+///            "$ref": "#/definitions/filtered"
 ///          },
 ///          "hasUnknownVersions": {
 ///            "type": "boolean"
 ///          },
 ///          "ignoreSettings": {
-///            "type": "object",
-///            "properties": {
-///              "adminOnly": {
-///                "type": "boolean"
-///              },
-///              "disregardFilesystemIgnores": {
-///                "type": "boolean"
-///              },
-///              "reasonRequired": {
-///                "type": "boolean"
-///              }
-///            }
+///            "$ref": "#/definitions/ignoreSettings"
 ///          },
 ///          "isPrivate": {
 ///            "type": "boolean"
@@ -496,281 +586,10 @@ pub mod error {
 ///            "type": "string"
 ///          },
 ///          "uniqueCount": {
-///            "type": "number"
+///            "type": "integer"
 ///          },
 ///          "vulnerabilities": {
-///            "type": "array",
-///            "items": {
-///              "type": "object",
-///              "properties": {
-///                "CVSSv3": {
-///                  "type": "string"
-///                },
-///                "alternativeIds": {
-///                  "type": "array"
-///                },
-///                "creationTime": {
-///                  "type": "string"
-///                },
-///                "credit": {
-///                  "type": "array",
-///                  "items": {
-///                    "type": "string"
-///                  }
-///                },
-///                "cvssDetails": {
-///                  "type": "array",
-///                  "items": {
-///                    "type": "object",
-///                    "properties": {
-///                      "assigner": {
-///                        "type": "string"
-///                      },
-///                      "cvssV3BaseScore": {
-///                        "type": "number"
-///                      },
-///                      "cvssV3Vector": {
-///                        "type": "string"
-///                      },
-///                      "modificationTime": {
-///                        "type": "string"
-///                      },
-///                      "severity": {
-///                        "type": "string"
-///                      }
-///                    }
-///                  }
-///                },
-///                "cvssScore": {
-///                  "type": "number"
-///                },
-///                "cvssSources": {
-///                  "type": "array",
-///                  "items": {
-///                    "type": "object",
-///                    "properties": {
-///                      "assigner": {
-///                        "type": "string"
-///                      },
-///                      "baseScore": {
-///                        "type": "number"
-///                      },
-///                      "cvssVersion": {
-///                        "type": "string"
-///                      },
-///                      "modificationTime": {
-///                        "type": "string"
-///                      },
-///                      "severity": {
-///                        "type": "string"
-///                      },
-///                      "type": {
-///                        "type": "string"
-///                      },
-///                      "vector": {
-///                        "type": "string"
-///                      }
-///                    }
-///                  }
-///                },
-///                "description": {
-///                  "type": "string"
-///                },
-///                "disclosureTime": {
-///                  "type": "string"
-///                },
-///                "epssDetails": {
-///                  "type": "object",
-///                  "properties": {
-///                    "modelVersion": {
-///                      "type": "string"
-///                    },
-///                    "percentile": {
-///                      "type": "string"
-///                    },
-///                    "probability": {
-///                      "type": "string"
-///                    }
-///                  }
-///                },
-///                "exploit": {
-///                  "type": "string"
-///                },
-///                "exploitDetails": {
-///                  "type": "object",
-///                  "properties": {
-///                    "maturityLevels": {
-///                      "type": "array",
-///                      "items": {
-///                        "type": "object",
-///                        "properties": {
-///                          "format": {
-///                            "type": "string"
-///                          },
-///                          "level": {
-///                            "type": "string"
-///                          },
-///                          "type": {
-///                            "type": "string"
-///                          }
-///                        }
-///                      }
-///                    },
-///                    "sources": {
-///                      "type": "array"
-///                    }
-///                  }
-///                },
-///                "fixedIn": {
-///                  "type": "array",
-///                  "items": {
-///                    "type": "string"
-///                  }
-///                },
-///                "from": {
-///                  "type": "array",
-///                  "items": {
-///                    "type": "string"
-///                  }
-///                },
-///                "functions": {
-///                  "type": "array"
-///                },
-///                "functions_new": {
-///                  "type": "array"
-///                },
-///                "id": {
-///                  "type": "string"
-///                },
-///                "identifiers": {
-///                  "type": "object",
-///                  "properties": {
-///                    "CVE": {
-///                      "type": "array",
-///                      "items": {
-///                        "type": "string"
-///                      }
-///                    },
-///                    "CWE": {
-///                      "type": "array",
-///                      "items": {
-///                        "type": "string"
-///                      }
-///                    }
-///                  }
-///                },
-///                "insights": {
-///                  "type": "object",
-///                  "properties": {
-///                    "triageAdvice": {
-///                      "type": "null"
-///                    }
-///                  }
-///                },
-///                "isDisputed": {
-///                  "type": "boolean"
-///                },
-///                "isPatchable": {
-///                  "type": "boolean"
-///                },
-///                "isUpgradable": {
-///                  "type": "boolean"
-///                },
-///                "language": {
-///                  "type": "string"
-///                },
-///                "malicious": {
-///                  "type": "boolean"
-///                },
-///                "mavenModuleName": {
-///                  "type": "object",
-///                  "properties": {
-///                    "artifactId": {
-///                      "type": "string"
-///                    },
-///                    "groupId": {
-///                      "type": "string"
-///                    }
-///                  }
-///                },
-///                "modificationTime": {
-///                  "type": "string"
-///                },
-///                "moduleName": {
-///                  "type": "string"
-///                },
-///                "name": {
-///                  "type": "string"
-///                },
-///                "packageManager": {
-///                  "type": "string"
-///                },
-///                "packageName": {
-///                  "type": "string"
-///                },
-///                "patches": {
-///                  "type": "array"
-///                },
-///                "proprietary": {
-///                  "type": "boolean"
-///                },
-///                "publicationTime": {
-///                  "type": "string"
-///                },
-///                "references": {
-///                  "type": "array",
-///                  "items": {
-///                    "type": "object",
-///                    "properties": {
-///                      "title": {
-///                        "type": "string"
-///                      },
-///                      "url": {
-///                        "type": "string"
-///                      }
-///                    }
-///                  }
-///                },
-///                "semver": {
-///                  "type": "object",
-///                  "properties": {
-///                    "vulnerable": {
-///                      "type": "array",
-///                      "items": {
-///                        "type": "string"
-///                      }
-///                    }
-///                  }
-///                },
-///                "severity": {
-///                  "type": "string"
-///                },
-///                "severityBasedOn": {
-///                  "type": "string"
-///                },
-///                "severityWithCritical": {
-///                  "type": "string"
-///                },
-///                "socialTrendAlert": {
-///                  "type": "boolean"
-///                },
-///                "title": {
-///                  "type": "string"
-///                },
-///                "upgradePath": {
-///                  "type": "array",
-///                  "items": {
-///                    "type": [
-///                      "boolean",
-///                      "string"
-///                    ]
-///                  }
-///                },
-///                "version": {
-///                  "type": "string"
-///                }
-///              }
-///            }
+///            "$ref": "#/definitions/vulnerabilities"
 ///          }
 ///        }
 ///      }
@@ -834,32 +653,13 @@ pub mod error {
 ///      "type": "boolean"
 ///    },
 ///    "filtered": {
-///      "type": "object",
-///      "properties": {
-///        "ignore": {
-///          "type": "array"
-///        },
-///        "patch": {
-///          "type": "array"
-///        }
-///      }
+///      "$ref": "#/definitions/filtered"
 ///    },
 ///    "hasUnknownVersions": {
 ///      "type": "boolean"
 ///    },
 ///    "ignoreSettings": {
-///      "type": "object",
-///      "properties": {
-///        "adminOnly": {
-///          "type": "boolean"
-///        },
-///        "disregardFilesystemIgnores": {
-///          "type": "boolean"
-///        },
-///        "reasonRequired": {
-///          "type": "boolean"
-///        }
-///      }
+///      "$ref": "#/definitions/ignoreSettings"
 ///    },
 ///    "isPrivate": {
 ///      "type": "boolean"
@@ -1129,267 +929,10 @@ pub mod error {
 ///      "type": "string"
 ///    },
 ///    "uniqueCount": {
-///      "type": "number"
+///      "type": "integer"
 ///    },
 ///    "vulnerabilities": {
-///      "type": "array",
-///      "items": {
-///        "type": "object",
-///        "properties": {
-///          "CVSSv3": {
-///            "type": "string"
-///          },
-///          "cpes": {
-///            "type": "array"
-///          },
-///          "creationTime": {
-///            "type": "string"
-///          },
-///          "credit": {
-///            "type": "array",
-///            "items": {
-///              "type": "string"
-///            }
-///          },
-///          "cvssDetails": {
-///            "type": "array",
-///            "items": {
-///              "type": "object",
-///              "properties": {
-///                "assigner": {
-///                  "type": "string"
-///                },
-///                "cvssV3BaseScore": {
-///                  "type": "number"
-///                },
-///                "cvssV3Vector": {
-///                  "type": "string"
-///                },
-///                "modificationTime": {
-///                  "type": "string"
-///                },
-///                "severity": {
-///                  "type": "string"
-///                }
-///              }
-///            }
-///          },
-///          "cvssScore": {
-///            "type": "number"
-///          },
-///          "cvssSources": {
-///            "type": "array",
-///            "items": {
-///              "type": "object",
-///              "properties": {
-///                "assigner": {
-///                  "type": "string"
-///                },
-///                "baseScore": {
-///                  "type": "number"
-///                },
-///                "cvssVersion": {
-///                  "type": "string"
-///                },
-///                "modificationTime": {
-///                  "type": "string"
-///                },
-///                "severity": {
-///                  "type": "string"
-///                },
-///                "type": {
-///                  "type": "string"
-///                },
-///                "vector": {
-///                  "type": "string"
-///                }
-///              }
-///            }
-///          },
-///          "description": {
-///            "type": "string"
-///          },
-///          "disclosureTime": {
-///            "type": "string"
-///          },
-///          "dockerBaseImage": {
-///            "type": "string"
-///          },
-///          "epssDetails": {
-///            "type": "object",
-///            "properties": {
-///              "modelVersion": {
-///                "type": "string"
-///              },
-///              "percentile": {
-///                "type": "string"
-///              },
-///              "probability": {
-///                "type": "string"
-///              }
-///            }
-///          },
-///          "exploit": {
-///            "type": "string"
-///          },
-///          "exploitDetails": {
-///            "type": "object",
-///            "properties": {
-///              "maturityLevels": {
-///                "type": "array",
-///                "items": {
-///                  "type": "object",
-///                  "properties": {
-///                    "format": {
-///                      "type": "string"
-///                    },
-///                    "level": {
-///                      "type": "string"
-///                    },
-///                    "type": {
-///                      "type": "string"
-///                    }
-///                  }
-///                }
-///              },
-///              "sources": {
-///                "type": "array"
-///              }
-///            }
-///          },
-///          "fixedIn": {
-///            "type": "array"
-///          },
-///          "from": {
-///            "type": "array",
-///            "items": {
-///              "type": "string"
-///            }
-///          },
-///          "id": {
-///            "type": "string"
-///          },
-///          "identifiers": {
-///            "type": "object",
-///            "properties": {
-///              "ALTERNATIVE": {
-///                "type": "array"
-///              },
-///              "CVE": {
-///                "type": "array",
-///                "items": {
-///                  "type": "string"
-///                }
-///              },
-///              "CWE": {
-///                "type": "array",
-///                "items": {
-///                  "type": "string"
-///                }
-///              }
-///            }
-///          },
-///          "insights": {
-///            "type": "object",
-///            "properties": {
-///              "triageAdvice": {
-///                "type": "null"
-///              }
-///            }
-///          },
-///          "isDisputed": {
-///            "type": "boolean"
-///          },
-///          "isPatchable": {
-///            "type": "boolean"
-///          },
-///          "isUpgradable": {
-///            "type": "boolean"
-///          },
-///          "language": {
-///            "type": "string"
-///          },
-///          "malicious": {
-///            "type": "boolean"
-///          },
-///          "modificationTime": {
-///            "type": "string"
-///          },
-///          "name": {
-///            "type": "string"
-///          },
-///          "nvdSeverity": {
-///            "type": "string"
-///          },
-///          "packageManager": {
-///            "type": "string"
-///          },
-///          "packageName": {
-///            "type": "string"
-///          },
-///          "patches": {
-///            "type": "array"
-///          },
-///          "publicationTime": {
-///            "type": "string"
-///          },
-///          "references": {
-///            "type": "array",
-///            "items": {
-///              "type": "object",
-///              "properties": {
-///                "title": {
-///                  "type": "string"
-///                },
-///                "url": {
-///                  "type": "string"
-///                }
-///              }
-///            }
-///          },
-///          "relativeImportance": {
-///            "type": "string"
-///          },
-///          "semver": {
-///            "type": "object",
-///            "properties": {
-///              "vulnerable": {
-///                "type": "array",
-///                "items": {
-///                  "type": "string"
-///                }
-///              }
-///            }
-///          },
-///          "severity": {
-///            "type": "string"
-///          },
-///          "severityBasedOn": {
-///            "type": "string"
-///          },
-///          "severityWithCritical": {
-///            "type": "string"
-///          },
-///          "socialTrendAlert": {
-///            "type": "boolean"
-///          },
-///          "title": {
-///            "type": "string"
-///          },
-///          "upgradePath": {
-///            "type": "array",
-///            "items": {
-///              "type": [
-///                "boolean",
-///                "string"
-///              ]
-///            }
-///          },
-///          "version": {
-///            "type": "string"
-///          }
-///        }
-///      }
+///      "$ref": "#/definitions/vulnerabilities"
 ///    }
 ///  }
 ///}
@@ -1420,7 +963,7 @@ pub struct SnykContainer {
     )]
     pub filesystem_policy: ::std::option::Option<bool>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
-    pub filtered: ::std::option::Option<SnykContainerFiltered>,
+    pub filtered: ::std::option::Option<Filtered>,
     #[serde(
         rename = "hasUnknownVersions",
         default,
@@ -1432,7 +975,7 @@ pub struct SnykContainer {
         default,
         skip_serializing_if = "::std::option::Option::is_none"
     )]
-    pub ignore_settings: ::std::option::Option<SnykContainerIgnoreSettings>,
+    pub ignore_settings: ::std::option::Option<IgnoreSettings>,
     #[serde(
         rename = "isPrivate",
         default,
@@ -1464,16 +1007,11 @@ pub struct SnykContainer {
     pub project_name: ::std::string::String,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub summary: ::std::option::Option<::std::string::String>,
-    #[serde(
-        rename = "targetFile",
-        default,
-        skip_serializing_if = "::std::option::Option::is_none"
-    )]
-    pub target_file: ::std::option::Option<::std::string::String>,
+    #[serde(rename = "targetFile")]
+    pub target_file: ::std::string::String,
     #[serde(rename = "uniqueCount")]
-    pub unique_count: f64,
-    #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
-    pub vulnerabilities: ::std::vec::Vec<SnykContainerVulnerabilitiesItem>,
+    pub unique_count: i64,
+    pub vulnerabilities: Vulnerabilities,
 }
 impl ::std::convert::From<&SnykContainer> for SnykContainer {
     fn from(value: &SnykContainer) -> Self {
@@ -1487,6 +1025,13 @@ impl ::std::convert::From<&SnykContainer> for SnykContainer {
 /// ```json
 ///{
 ///  "type": "object",
+///  "required": [
+///    "org",
+///    "projectName",
+///    "targetFile",
+///    "uniqueCount",
+///    "vulnerabilities"
+///  ],
 ///  "properties": {
 ///    "dependencyCount": {
 ///      "type": "number"
@@ -1501,32 +1046,13 @@ impl ::std::convert::From<&SnykContainer> for SnykContainer {
 ///      "type": "boolean"
 ///    },
 ///    "filtered": {
-///      "type": "object",
-///      "properties": {
-///        "ignore": {
-///          "type": "array"
-///        },
-///        "patch": {
-///          "type": "array"
-///        }
-///      }
+///      "$ref": "#/definitions/filtered"
 ///    },
 ///    "hasUnknownVersions": {
 ///      "type": "boolean"
 ///    },
 ///    "ignoreSettings": {
-///      "type": "object",
-///      "properties": {
-///        "adminOnly": {
-///          "type": "boolean"
-///        },
-///        "disregardFilesystemIgnores": {
-///          "type": "boolean"
-///        },
-///        "reasonRequired": {
-///          "type": "boolean"
-///        }
-///      }
+///      "$ref": "#/definitions/ignoreSettings"
 ///    },
 ///    "isPrivate": {
 ///      "type": "boolean"
@@ -1940,281 +1466,10 @@ impl ::std::convert::From<&SnykContainer> for SnykContainer {
 ///      "type": "string"
 ///    },
 ///    "uniqueCount": {
-///      "type": "number"
+///      "type": "integer"
 ///    },
 ///    "vulnerabilities": {
-///      "type": "array",
-///      "items": {
-///        "type": "object",
-///        "properties": {
-///          "CVSSv3": {
-///            "type": "string"
-///          },
-///          "alternativeIds": {
-///            "type": "array"
-///          },
-///          "creationTime": {
-///            "type": "string"
-///          },
-///          "credit": {
-///            "type": "array",
-///            "items": {
-///              "type": "string"
-///            }
-///          },
-///          "cvssDetails": {
-///            "type": "array",
-///            "items": {
-///              "type": "object",
-///              "properties": {
-///                "assigner": {
-///                  "type": "string"
-///                },
-///                "cvssV3BaseScore": {
-///                  "type": "number"
-///                },
-///                "cvssV3Vector": {
-///                  "type": "string"
-///                },
-///                "modificationTime": {
-///                  "type": "string"
-///                },
-///                "severity": {
-///                  "type": "string"
-///                }
-///              }
-///            }
-///          },
-///          "cvssScore": {
-///            "type": "number"
-///          },
-///          "cvssSources": {
-///            "type": "array",
-///            "items": {
-///              "type": "object",
-///              "properties": {
-///                "assigner": {
-///                  "type": "string"
-///                },
-///                "baseScore": {
-///                  "type": "number"
-///                },
-///                "cvssVersion": {
-///                  "type": "string"
-///                },
-///                "modificationTime": {
-///                  "type": "string"
-///                },
-///                "severity": {
-///                  "type": "string"
-///                },
-///                "type": {
-///                  "type": "string"
-///                },
-///                "vector": {
-///                  "type": "string"
-///                }
-///              }
-///            }
-///          },
-///          "description": {
-///            "type": "string"
-///          },
-///          "disclosureTime": {
-///            "type": "string"
-///          },
-///          "epssDetails": {
-///            "type": "object",
-///            "properties": {
-///              "modelVersion": {
-///                "type": "string"
-///              },
-///              "percentile": {
-///                "type": "string"
-///              },
-///              "probability": {
-///                "type": "string"
-///              }
-///            }
-///          },
-///          "exploit": {
-///            "type": "string"
-///          },
-///          "exploitDetails": {
-///            "type": "object",
-///            "properties": {
-///              "maturityLevels": {
-///                "type": "array",
-///                "items": {
-///                  "type": "object",
-///                  "properties": {
-///                    "format": {
-///                      "type": "string"
-///                    },
-///                    "level": {
-///                      "type": "string"
-///                    },
-///                    "type": {
-///                      "type": "string"
-///                    }
-///                  }
-///                }
-///              },
-///              "sources": {
-///                "type": "array"
-///              }
-///            }
-///          },
-///          "fixedIn": {
-///            "type": "array",
-///            "items": {
-///              "type": "string"
-///            }
-///          },
-///          "from": {
-///            "type": "array",
-///            "items": {
-///              "type": "string"
-///            }
-///          },
-///          "functions": {
-///            "type": "array"
-///          },
-///          "functions_new": {
-///            "type": "array"
-///          },
-///          "id": {
-///            "type": "string"
-///          },
-///          "identifiers": {
-///            "type": "object",
-///            "properties": {
-///              "CVE": {
-///                "type": "array",
-///                "items": {
-///                  "type": "string"
-///                }
-///              },
-///              "CWE": {
-///                "type": "array",
-///                "items": {
-///                  "type": "string"
-///                }
-///              }
-///            }
-///          },
-///          "insights": {
-///            "type": "object",
-///            "properties": {
-///              "triageAdvice": {
-///                "type": "null"
-///              }
-///            }
-///          },
-///          "isDisputed": {
-///            "type": "boolean"
-///          },
-///          "isPatchable": {
-///            "type": "boolean"
-///          },
-///          "isUpgradable": {
-///            "type": "boolean"
-///          },
-///          "language": {
-///            "type": "string"
-///          },
-///          "malicious": {
-///            "type": "boolean"
-///          },
-///          "mavenModuleName": {
-///            "type": "object",
-///            "properties": {
-///              "artifactId": {
-///                "type": "string"
-///              },
-///              "groupId": {
-///                "type": "string"
-///              }
-///            }
-///          },
-///          "modificationTime": {
-///            "type": "string"
-///          },
-///          "moduleName": {
-///            "type": "string"
-///          },
-///          "name": {
-///            "type": "string"
-///          },
-///          "packageManager": {
-///            "type": "string"
-///          },
-///          "packageName": {
-///            "type": "string"
-///          },
-///          "patches": {
-///            "type": "array"
-///          },
-///          "proprietary": {
-///            "type": "boolean"
-///          },
-///          "publicationTime": {
-///            "type": "string"
-///          },
-///          "references": {
-///            "type": "array",
-///            "items": {
-///              "type": "object",
-///              "properties": {
-///                "title": {
-///                  "type": "string"
-///                },
-///                "url": {
-///                  "type": "string"
-///                }
-///              }
-///            }
-///          },
-///          "semver": {
-///            "type": "object",
-///            "properties": {
-///              "vulnerable": {
-///                "type": "array",
-///                "items": {
-///                  "type": "string"
-///                }
-///              }
-///            }
-///          },
-///          "severity": {
-///            "type": "string"
-///          },
-///          "severityBasedOn": {
-///            "type": "string"
-///          },
-///          "severityWithCritical": {
-///            "type": "string"
-///          },
-///          "socialTrendAlert": {
-///            "type": "boolean"
-///          },
-///          "title": {
-///            "type": "string"
-///          },
-///          "upgradePath": {
-///            "type": "array",
-///            "items": {
-///              "type": [
-///                "boolean",
-///                "string"
-///              ]
-///            }
-///          },
-///          "version": {
-///            "type": "string"
-///          }
-///        }
-///      }
+///      "$ref": "#/definitions/vulnerabilities"
 ///    }
 ///  }
 ///}
@@ -2243,7 +1498,7 @@ pub struct SnykContainerApplicationsItem {
     )]
     pub filesystem_policy: ::std::option::Option<bool>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
-    pub filtered: ::std::option::Option<SnykContainerApplicationsItemFiltered>,
+    pub filtered: ::std::option::Option<Filtered>,
     #[serde(
         rename = "hasUnknownVersions",
         default,
@@ -2255,7 +1510,7 @@ pub struct SnykContainerApplicationsItem {
         default,
         skip_serializing_if = "::std::option::Option::is_none"
     )]
-    pub ignore_settings: ::std::option::Option<SnykContainerApplicationsItemIgnoreSettings>,
+    pub ignore_settings: ::std::option::Option<IgnoreSettings>,
     #[serde(
         rename = "isPrivate",
         default,
@@ -2267,11 +1522,12 @@ pub struct SnykContainerApplicationsItem {
         default,
         skip_serializing_if = "::std::option::Option::is_none"
     )]
-    pub licenses_policy: ::std::option::Option<SnykContainerApplicationsItemLicensesPolicy>,
+    pub licenses_policy: ::std::option::Option<
+        SnykContainerApplicationsItemLicensesPolicy,
+    >,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub ok: ::std::option::Option<bool>,
-    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
-    pub org: ::std::option::Option<::std::string::String>,
+    pub org: ::std::string::String,
     #[serde(
         rename = "packageManager",
         default,
@@ -2282,158 +1538,22 @@ pub struct SnykContainerApplicationsItem {
     pub path: ::std::option::Option<::std::string::String>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub policy: ::std::option::Option<::std::string::String>,
-    #[serde(
-        rename = "projectName",
-        default,
-        skip_serializing_if = "::std::option::Option::is_none"
-    )]
-    pub project_name: ::std::option::Option<::std::string::String>,
+    #[serde(rename = "projectName")]
+    pub project_name: ::std::string::String,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub remediation: ::std::option::Option<SnykContainerApplicationsItemRemediation>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub summary: ::std::option::Option<::std::string::String>,
-    #[serde(
-        rename = "targetFile",
-        default,
-        skip_serializing_if = "::std::option::Option::is_none"
-    )]
-    pub target_file: ::std::option::Option<::std::string::String>,
-    #[serde(
-        rename = "uniqueCount",
-        default,
-        skip_serializing_if = "::std::option::Option::is_none"
-    )]
-    pub unique_count: ::std::option::Option<f64>,
-    #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
-    pub vulnerabilities: ::std::vec::Vec<SnykContainerApplicationsItemVulnerabilitiesItem>,
+    #[serde(rename = "targetFile")]
+    pub target_file: ::std::string::String,
+    #[serde(rename = "uniqueCount")]
+    pub unique_count: i64,
+    pub vulnerabilities: Vulnerabilities,
 }
-impl ::std::convert::From<&SnykContainerApplicationsItem> for SnykContainerApplicationsItem {
+impl ::std::convert::From<&SnykContainerApplicationsItem>
+for SnykContainerApplicationsItem {
     fn from(value: &SnykContainerApplicationsItem) -> Self {
         value.clone()
-    }
-}
-impl ::std::default::Default for SnykContainerApplicationsItem {
-    fn default() -> Self {
-        Self {
-            dependency_count: Default::default(),
-            display_target_file: Default::default(),
-            docker: Default::default(),
-            filesystem_policy: Default::default(),
-            filtered: Default::default(),
-            has_unknown_versions: Default::default(),
-            ignore_settings: Default::default(),
-            is_private: Default::default(),
-            licenses_policy: Default::default(),
-            ok: Default::default(),
-            org: Default::default(),
-            package_manager: Default::default(),
-            path: Default::default(),
-            policy: Default::default(),
-            project_name: Default::default(),
-            remediation: Default::default(),
-            summary: Default::default(),
-            target_file: Default::default(),
-            unique_count: Default::default(),
-            vulnerabilities: Default::default(),
-        }
-    }
-}
-///`SnykContainerApplicationsItemFiltered`
-///
-/// <details><summary>JSON schema</summary>
-///
-/// ```json
-///{
-///  "type": "object",
-///  "properties": {
-///    "ignore": {
-///      "type": "array"
-///    },
-///    "patch": {
-///      "type": "array"
-///    }
-///  }
-///}
-/// ```
-/// </details>
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
-pub struct SnykContainerApplicationsItemFiltered {
-    #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
-    pub ignore: ::std::vec::Vec<::serde_json::Value>,
-    #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
-    pub patch: ::std::vec::Vec<::serde_json::Value>,
-}
-impl ::std::convert::From<&SnykContainerApplicationsItemFiltered>
-    for SnykContainerApplicationsItemFiltered
-{
-    fn from(value: &SnykContainerApplicationsItemFiltered) -> Self {
-        value.clone()
-    }
-}
-impl ::std::default::Default for SnykContainerApplicationsItemFiltered {
-    fn default() -> Self {
-        Self {
-            ignore: Default::default(),
-            patch: Default::default(),
-        }
-    }
-}
-///`SnykContainerApplicationsItemIgnoreSettings`
-///
-/// <details><summary>JSON schema</summary>
-///
-/// ```json
-///{
-///  "type": "object",
-///  "properties": {
-///    "adminOnly": {
-///      "type": "boolean"
-///    },
-///    "disregardFilesystemIgnores": {
-///      "type": "boolean"
-///    },
-///    "reasonRequired": {
-///      "type": "boolean"
-///    }
-///  }
-///}
-/// ```
-/// </details>
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
-pub struct SnykContainerApplicationsItemIgnoreSettings {
-    #[serde(
-        rename = "adminOnly",
-        default,
-        skip_serializing_if = "::std::option::Option::is_none"
-    )]
-    pub admin_only: ::std::option::Option<bool>,
-    #[serde(
-        rename = "disregardFilesystemIgnores",
-        default,
-        skip_serializing_if = "::std::option::Option::is_none"
-    )]
-    pub disregard_filesystem_ignores: ::std::option::Option<bool>,
-    #[serde(
-        rename = "reasonRequired",
-        default,
-        skip_serializing_if = "::std::option::Option::is_none"
-    )]
-    pub reason_required: ::std::option::Option<bool>,
-}
-impl ::std::convert::From<&SnykContainerApplicationsItemIgnoreSettings>
-    for SnykContainerApplicationsItemIgnoreSettings
-{
-    fn from(value: &SnykContainerApplicationsItemIgnoreSettings) -> Self {
-        value.clone()
-    }
-}
-impl ::std::default::Default for SnykContainerApplicationsItemIgnoreSettings {
-    fn default() -> Self {
-        Self {
-            admin_only: Default::default(),
-            disregard_filesystem_ignores: Default::default(),
-            reason_required: Default::default(),
-        }
     }
 }
 ///`SnykContainerApplicationsItemLicensesPolicy`
@@ -2687,14 +1807,14 @@ pub struct SnykContainerApplicationsItemLicensesPolicy {
         default,
         skip_serializing_if = "::std::option::Option::is_none"
     )]
-    pub org_license_rules:
-        ::std::option::Option<SnykContainerApplicationsItemLicensesPolicyOrgLicenseRules>,
+    pub org_license_rules: ::std::option::Option<
+        SnykContainerApplicationsItemLicensesPolicyOrgLicenseRules,
+    >,
     #[serde(default, skip_serializing_if = "::serde_json::Map::is_empty")]
     pub severities: ::serde_json::Map<::std::string::String, ::serde_json::Value>,
 }
 impl ::std::convert::From<&SnykContainerApplicationsItemLicensesPolicy>
-    for SnykContainerApplicationsItemLicensesPolicy
-{
+for SnykContainerApplicationsItemLicensesPolicy {
     fn from(value: &SnykContainerApplicationsItemLicensesPolicy) -> Self {
         value.clone()
     }
@@ -2950,122 +2070,138 @@ pub struct SnykContainerApplicationsItemLicensesPolicyOrgLicenseRules {
         default,
         skip_serializing_if = "::std::option::Option::is_none"
     )]
-    pub agpl_1_0:
-        ::std::option::Option<SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesAgpl10>,
+    pub agpl_1_0: ::std::option::Option<
+        SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesAgpl10,
+    >,
     #[serde(
         rename = "AGPL-3.0",
         default,
         skip_serializing_if = "::std::option::Option::is_none"
     )]
-    pub agpl_3_0:
-        ::std::option::Option<SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesAgpl30>,
+    pub agpl_3_0: ::std::option::Option<
+        SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesAgpl30,
+    >,
     #[serde(
         rename = "Artistic-1.0",
         default,
         skip_serializing_if = "::std::option::Option::is_none"
     )]
-    pub artistic_1_0:
-        ::std::option::Option<SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesArtistic10>,
+    pub artistic_1_0: ::std::option::Option<
+        SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesArtistic10,
+    >,
     #[serde(
         rename = "Artistic-2.0",
         default,
         skip_serializing_if = "::std::option::Option::is_none"
     )]
-    pub artistic_2_0:
-        ::std::option::Option<SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesArtistic20>,
+    pub artistic_2_0: ::std::option::Option<
+        SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesArtistic20,
+    >,
     #[serde(
         rename = "CDDL-1.0",
         default,
         skip_serializing_if = "::std::option::Option::is_none"
     )]
-    pub cddl_1_0:
-        ::std::option::Option<SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesCddl10>,
+    pub cddl_1_0: ::std::option::Option<
+        SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesCddl10,
+    >,
     #[serde(
         rename = "CPOL-1.02",
         default,
         skip_serializing_if = "::std::option::Option::is_none"
     )]
-    pub cpol_1_02:
-        ::std::option::Option<SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesCpol102>,
+    pub cpol_1_02: ::std::option::Option<
+        SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesCpol102,
+    >,
     #[serde(
         rename = "EPL-1.0",
         default,
         skip_serializing_if = "::std::option::Option::is_none"
     )]
-    pub epl_1_0:
-        ::std::option::Option<SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesEpl10>,
+    pub epl_1_0: ::std::option::Option<
+        SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesEpl10,
+    >,
     #[serde(
         rename = "GPL-2.0",
         default,
         skip_serializing_if = "::std::option::Option::is_none"
     )]
-    pub gpl_2_0:
-        ::std::option::Option<SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesGpl20>,
+    pub gpl_2_0: ::std::option::Option<
+        SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesGpl20,
+    >,
     #[serde(
         rename = "GPL-3.0",
         default,
         skip_serializing_if = "::std::option::Option::is_none"
     )]
-    pub gpl_3_0:
-        ::std::option::Option<SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesGpl30>,
+    pub gpl_3_0: ::std::option::Option<
+        SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesGpl30,
+    >,
     #[serde(
         rename = "LGPL-2.0",
         default,
         skip_serializing_if = "::std::option::Option::is_none"
     )]
-    pub lgpl_2_0:
-        ::std::option::Option<SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesLgpl20>,
+    pub lgpl_2_0: ::std::option::Option<
+        SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesLgpl20,
+    >,
     #[serde(
         rename = "LGPL-2.1",
         default,
         skip_serializing_if = "::std::option::Option::is_none"
     )]
-    pub lgpl_2_1:
-        ::std::option::Option<SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesLgpl21>,
+    pub lgpl_2_1: ::std::option::Option<
+        SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesLgpl21,
+    >,
     #[serde(
         rename = "LGPL-3.0",
         default,
         skip_serializing_if = "::std::option::Option::is_none"
     )]
-    pub lgpl_3_0:
-        ::std::option::Option<SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesLgpl30>,
+    pub lgpl_3_0: ::std::option::Option<
+        SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesLgpl30,
+    >,
     #[serde(
         rename = "MPL-1.1",
         default,
         skip_serializing_if = "::std::option::Option::is_none"
     )]
-    pub mpl_1_1:
-        ::std::option::Option<SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesMpl11>,
+    pub mpl_1_1: ::std::option::Option<
+        SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesMpl11,
+    >,
     #[serde(
         rename = "MPL-2.0",
         default,
         skip_serializing_if = "::std::option::Option::is_none"
     )]
-    pub mpl_2_0:
-        ::std::option::Option<SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesMpl20>,
+    pub mpl_2_0: ::std::option::Option<
+        SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesMpl20,
+    >,
     #[serde(
         rename = "MS-RL",
         default,
         skip_serializing_if = "::std::option::Option::is_none"
     )]
-    pub ms_rl:
-        ::std::option::Option<SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesMsRl>,
+    pub ms_rl: ::std::option::Option<
+        SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesMsRl,
+    >,
     #[serde(
         rename = "SimPL-2.0",
         default,
         skip_serializing_if = "::std::option::Option::is_none"
     )]
-    pub sim_pl_2_0:
-        ::std::option::Option<SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesSimPl20>,
+    pub sim_pl_2_0: ::std::option::Option<
+        SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesSimPl20,
+    >,
 }
 impl ::std::convert::From<&SnykContainerApplicationsItemLicensesPolicyOrgLicenseRules>
-    for SnykContainerApplicationsItemLicensesPolicyOrgLicenseRules
-{
+for SnykContainerApplicationsItemLicensesPolicyOrgLicenseRules {
     fn from(value: &SnykContainerApplicationsItemLicensesPolicyOrgLicenseRules) -> Self {
         value.clone()
     }
 }
-impl ::std::default::Default for SnykContainerApplicationsItemLicensesPolicyOrgLicenseRules {
+impl ::std::default::Default
+for SnykContainerApplicationsItemLicensesPolicyOrgLicenseRules {
     fn default() -> Self {
         Self {
             agpl_1_0: Default::default(),
@@ -3121,14 +2257,17 @@ pub struct SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesAgpl10 {
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub severity: ::std::option::Option<::std::string::String>,
 }
-impl ::std::convert::From<&SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesAgpl10>
-    for SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesAgpl10
-{
-    fn from(value: &SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesAgpl10) -> Self {
+impl ::std::convert::From<
+    &SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesAgpl10,
+> for SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesAgpl10 {
+    fn from(
+        value: &SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesAgpl10,
+    ) -> Self {
         value.clone()
     }
 }
-impl ::std::default::Default for SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesAgpl10 {
+impl ::std::default::Default
+for SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesAgpl10 {
     fn default() -> Self {
         Self {
             instructions: Default::default(),
@@ -3171,14 +2310,17 @@ pub struct SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesAgpl30 {
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub severity: ::std::option::Option<::std::string::String>,
 }
-impl ::std::convert::From<&SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesAgpl30>
-    for SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesAgpl30
-{
-    fn from(value: &SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesAgpl30) -> Self {
+impl ::std::convert::From<
+    &SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesAgpl30,
+> for SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesAgpl30 {
+    fn from(
+        value: &SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesAgpl30,
+    ) -> Self {
         value.clone()
     }
 }
-impl ::std::default::Default for SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesAgpl30 {
+impl ::std::default::Default
+for SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesAgpl30 {
     fn default() -> Self {
         Self {
             instructions: Default::default(),
@@ -3221,16 +2363,17 @@ pub struct SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesArtistic10 
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub severity: ::std::option::Option<::std::string::String>,
 }
-impl ::std::convert::From<&SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesArtistic10>
-    for SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesArtistic10
-{
-    fn from(value: &SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesArtistic10) -> Self {
+impl ::std::convert::From<
+    &SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesArtistic10,
+> for SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesArtistic10 {
+    fn from(
+        value: &SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesArtistic10,
+    ) -> Self {
         value.clone()
     }
 }
 impl ::std::default::Default
-    for SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesArtistic10
-{
+for SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesArtistic10 {
     fn default() -> Self {
         Self {
             instructions: Default::default(),
@@ -3273,16 +2416,17 @@ pub struct SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesArtistic20 
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub severity: ::std::option::Option<::std::string::String>,
 }
-impl ::std::convert::From<&SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesArtistic20>
-    for SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesArtistic20
-{
-    fn from(value: &SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesArtistic20) -> Self {
+impl ::std::convert::From<
+    &SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesArtistic20,
+> for SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesArtistic20 {
+    fn from(
+        value: &SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesArtistic20,
+    ) -> Self {
         value.clone()
     }
 }
 impl ::std::default::Default
-    for SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesArtistic20
-{
+for SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesArtistic20 {
     fn default() -> Self {
         Self {
             instructions: Default::default(),
@@ -3325,14 +2469,17 @@ pub struct SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesCddl10 {
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub severity: ::std::option::Option<::std::string::String>,
 }
-impl ::std::convert::From<&SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesCddl10>
-    for SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesCddl10
-{
-    fn from(value: &SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesCddl10) -> Self {
+impl ::std::convert::From<
+    &SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesCddl10,
+> for SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesCddl10 {
+    fn from(
+        value: &SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesCddl10,
+    ) -> Self {
         value.clone()
     }
 }
-impl ::std::default::Default for SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesCddl10 {
+impl ::std::default::Default
+for SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesCddl10 {
     fn default() -> Self {
         Self {
             instructions: Default::default(),
@@ -3375,14 +2522,17 @@ pub struct SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesCpol102 {
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub severity: ::std::option::Option<::std::string::String>,
 }
-impl ::std::convert::From<&SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesCpol102>
-    for SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesCpol102
-{
-    fn from(value: &SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesCpol102) -> Self {
+impl ::std::convert::From<
+    &SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesCpol102,
+> for SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesCpol102 {
+    fn from(
+        value: &SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesCpol102,
+    ) -> Self {
         value.clone()
     }
 }
-impl ::std::default::Default for SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesCpol102 {
+impl ::std::default::Default
+for SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesCpol102 {
     fn default() -> Self {
         Self {
             instructions: Default::default(),
@@ -3425,14 +2575,17 @@ pub struct SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesEpl10 {
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub severity: ::std::option::Option<::std::string::String>,
 }
-impl ::std::convert::From<&SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesEpl10>
-    for SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesEpl10
-{
-    fn from(value: &SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesEpl10) -> Self {
+impl ::std::convert::From<
+    &SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesEpl10,
+> for SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesEpl10 {
+    fn from(
+        value: &SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesEpl10,
+    ) -> Self {
         value.clone()
     }
 }
-impl ::std::default::Default for SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesEpl10 {
+impl ::std::default::Default
+for SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesEpl10 {
     fn default() -> Self {
         Self {
             instructions: Default::default(),
@@ -3475,14 +2628,17 @@ pub struct SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesGpl20 {
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub severity: ::std::option::Option<::std::string::String>,
 }
-impl ::std::convert::From<&SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesGpl20>
-    for SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesGpl20
-{
-    fn from(value: &SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesGpl20) -> Self {
+impl ::std::convert::From<
+    &SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesGpl20,
+> for SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesGpl20 {
+    fn from(
+        value: &SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesGpl20,
+    ) -> Self {
         value.clone()
     }
 }
-impl ::std::default::Default for SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesGpl20 {
+impl ::std::default::Default
+for SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesGpl20 {
     fn default() -> Self {
         Self {
             instructions: Default::default(),
@@ -3525,14 +2681,17 @@ pub struct SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesGpl30 {
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub severity: ::std::option::Option<::std::string::String>,
 }
-impl ::std::convert::From<&SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesGpl30>
-    for SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesGpl30
-{
-    fn from(value: &SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesGpl30) -> Self {
+impl ::std::convert::From<
+    &SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesGpl30,
+> for SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesGpl30 {
+    fn from(
+        value: &SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesGpl30,
+    ) -> Self {
         value.clone()
     }
 }
-impl ::std::default::Default for SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesGpl30 {
+impl ::std::default::Default
+for SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesGpl30 {
     fn default() -> Self {
         Self {
             instructions: Default::default(),
@@ -3575,14 +2734,17 @@ pub struct SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesLgpl20 {
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub severity: ::std::option::Option<::std::string::String>,
 }
-impl ::std::convert::From<&SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesLgpl20>
-    for SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesLgpl20
-{
-    fn from(value: &SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesLgpl20) -> Self {
+impl ::std::convert::From<
+    &SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesLgpl20,
+> for SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesLgpl20 {
+    fn from(
+        value: &SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesLgpl20,
+    ) -> Self {
         value.clone()
     }
 }
-impl ::std::default::Default for SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesLgpl20 {
+impl ::std::default::Default
+for SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesLgpl20 {
     fn default() -> Self {
         Self {
             instructions: Default::default(),
@@ -3625,14 +2787,17 @@ pub struct SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesLgpl21 {
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub severity: ::std::option::Option<::std::string::String>,
 }
-impl ::std::convert::From<&SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesLgpl21>
-    for SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesLgpl21
-{
-    fn from(value: &SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesLgpl21) -> Self {
+impl ::std::convert::From<
+    &SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesLgpl21,
+> for SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesLgpl21 {
+    fn from(
+        value: &SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesLgpl21,
+    ) -> Self {
         value.clone()
     }
 }
-impl ::std::default::Default for SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesLgpl21 {
+impl ::std::default::Default
+for SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesLgpl21 {
     fn default() -> Self {
         Self {
             instructions: Default::default(),
@@ -3675,14 +2840,17 @@ pub struct SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesLgpl30 {
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub severity: ::std::option::Option<::std::string::String>,
 }
-impl ::std::convert::From<&SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesLgpl30>
-    for SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesLgpl30
-{
-    fn from(value: &SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesLgpl30) -> Self {
+impl ::std::convert::From<
+    &SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesLgpl30,
+> for SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesLgpl30 {
+    fn from(
+        value: &SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesLgpl30,
+    ) -> Self {
         value.clone()
     }
 }
-impl ::std::default::Default for SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesLgpl30 {
+impl ::std::default::Default
+for SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesLgpl30 {
     fn default() -> Self {
         Self {
             instructions: Default::default(),
@@ -3725,14 +2893,17 @@ pub struct SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesMpl11 {
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub severity: ::std::option::Option<::std::string::String>,
 }
-impl ::std::convert::From<&SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesMpl11>
-    for SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesMpl11
-{
-    fn from(value: &SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesMpl11) -> Self {
+impl ::std::convert::From<
+    &SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesMpl11,
+> for SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesMpl11 {
+    fn from(
+        value: &SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesMpl11,
+    ) -> Self {
         value.clone()
     }
 }
-impl ::std::default::Default for SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesMpl11 {
+impl ::std::default::Default
+for SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesMpl11 {
     fn default() -> Self {
         Self {
             instructions: Default::default(),
@@ -3775,14 +2946,17 @@ pub struct SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesMpl20 {
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub severity: ::std::option::Option<::std::string::String>,
 }
-impl ::std::convert::From<&SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesMpl20>
-    for SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesMpl20
-{
-    fn from(value: &SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesMpl20) -> Self {
+impl ::std::convert::From<
+    &SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesMpl20,
+> for SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesMpl20 {
+    fn from(
+        value: &SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesMpl20,
+    ) -> Self {
         value.clone()
     }
 }
-impl ::std::default::Default for SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesMpl20 {
+impl ::std::default::Default
+for SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesMpl20 {
     fn default() -> Self {
         Self {
             instructions: Default::default(),
@@ -3825,14 +2999,17 @@ pub struct SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesMsRl {
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub severity: ::std::option::Option<::std::string::String>,
 }
-impl ::std::convert::From<&SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesMsRl>
-    for SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesMsRl
-{
-    fn from(value: &SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesMsRl) -> Self {
+impl ::std::convert::From<
+    &SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesMsRl,
+> for SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesMsRl {
+    fn from(
+        value: &SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesMsRl,
+    ) -> Self {
         value.clone()
     }
 }
-impl ::std::default::Default for SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesMsRl {
+impl ::std::default::Default
+for SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesMsRl {
     fn default() -> Self {
         Self {
             instructions: Default::default(),
@@ -3875,14 +3052,17 @@ pub struct SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesSimPl20 {
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub severity: ::std::option::Option<::std::string::String>,
 }
-impl ::std::convert::From<&SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesSimPl20>
-    for SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesSimPl20
-{
-    fn from(value: &SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesSimPl20) -> Self {
+impl ::std::convert::From<
+    &SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesSimPl20,
+> for SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesSimPl20 {
+    fn from(
+        value: &SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesSimPl20,
+    ) -> Self {
         value.clone()
     }
 }
-impl ::std::default::Default for SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesSimPl20 {
+impl ::std::default::Default
+for SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesSimPl20 {
     fn default() -> Self {
         Self {
             instructions: Default::default(),
@@ -4054,13 +3234,14 @@ pub struct SnykContainerApplicationsItemRemediation {
     #[serde(default, skip_serializing_if = "::serde_json::Map::is_empty")]
     pub pin: ::serde_json::Map<::std::string::String, ::serde_json::Value>,
     #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
-    pub unresolved: ::std::vec::Vec<SnykContainerApplicationsItemRemediationUnresolvedItem>,
+    pub unresolved: ::std::vec::Vec<
+        SnykContainerApplicationsItemRemediationUnresolvedItem,
+    >,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub upgrade: ::std::option::Option<SnykContainerApplicationsItemRemediationUpgrade>,
 }
 impl ::std::convert::From<&SnykContainerApplicationsItemRemediation>
-    for SnykContainerApplicationsItemRemediation
-{
+for SnykContainerApplicationsItemRemediation {
     fn from(value: &SnykContainerApplicationsItemRemediation) -> Self {
         value.clone()
     }
@@ -4231,7 +3412,9 @@ pub struct SnykContainerApplicationsItemRemediationUnresolvedItem {
     )]
     pub publication_time: ::std::option::Option<::std::string::String>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
-    pub semver: ::std::option::Option<SnykContainerApplicationsItemRemediationUnresolvedItemSemver>,
+    pub semver: ::std::option::Option<
+        SnykContainerApplicationsItemRemediationUnresolvedItemSemver,
+    >,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub severity: ::std::option::Option<::std::string::String>,
     #[serde(
@@ -4253,14 +3436,14 @@ pub struct SnykContainerApplicationsItemRemediationUnresolvedItem {
         default,
         skip_serializing_if = "::std::vec::Vec::is_empty"
     )]
-    pub upgrade_path:
-        ::std::vec::Vec<SnykContainerApplicationsItemRemediationUnresolvedItemUpgradePathItem>,
+    pub upgrade_path: ::std::vec::Vec<
+        SnykContainerApplicationsItemRemediationUnresolvedItemUpgradePathItem,
+    >,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub version: ::std::option::Option<::std::string::String>,
 }
 impl ::std::convert::From<&SnykContainerApplicationsItemRemediationUnresolvedItem>
-    for SnykContainerApplicationsItemRemediationUnresolvedItem
-{
+for SnykContainerApplicationsItemRemediationUnresolvedItem {
     fn from(value: &SnykContainerApplicationsItemRemediationUnresolvedItem) -> Self {
         value.clone()
     }
@@ -4316,13 +3499,15 @@ pub struct SnykContainerApplicationsItemRemediationUnresolvedItemSemver {
     pub vulnerable: ::std::vec::Vec<::std::string::String>,
 }
 impl ::std::convert::From<&SnykContainerApplicationsItemRemediationUnresolvedItemSemver>
-    for SnykContainerApplicationsItemRemediationUnresolvedItemSemver
-{
-    fn from(value: &SnykContainerApplicationsItemRemediationUnresolvedItemSemver) -> Self {
+for SnykContainerApplicationsItemRemediationUnresolvedItemSemver {
+    fn from(
+        value: &SnykContainerApplicationsItemRemediationUnresolvedItemSemver,
+    ) -> Self {
         value.clone()
     }
 }
-impl ::std::default::Default for SnykContainerApplicationsItemRemediationUnresolvedItemSemver {
+impl ::std::default::Default
+for SnykContainerApplicationsItemRemediationUnresolvedItemSemver {
     fn default() -> Self {
         Self {
             vulnerable: Default::default(),
@@ -4349,13 +3534,15 @@ pub enum SnykContainerApplicationsItemRemediationUnresolvedItemUpgradePathItem {
     String(::std::string::String),
 }
 impl ::std::convert::From<&Self>
-    for SnykContainerApplicationsItemRemediationUnresolvedItemUpgradePathItem
-{
-    fn from(value: &SnykContainerApplicationsItemRemediationUnresolvedItemUpgradePathItem) -> Self {
+for SnykContainerApplicationsItemRemediationUnresolvedItemUpgradePathItem {
+    fn from(
+        value: &SnykContainerApplicationsItemRemediationUnresolvedItemUpgradePathItem,
+    ) -> Self {
         value.clone()
     }
 }
-impl ::std::fmt::Display for SnykContainerApplicationsItemRemediationUnresolvedItemUpgradePathItem {
+impl ::std::fmt::Display
+for SnykContainerApplicationsItemRemediationUnresolvedItemUpgradePathItem {
     fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
         match self {
             Self::Boolean(x) => x.fmt(f),
@@ -4364,8 +3551,7 @@ impl ::std::fmt::Display for SnykContainerApplicationsItemRemediationUnresolvedI
     }
 }
 impl ::std::convert::From<bool>
-    for SnykContainerApplicationsItemRemediationUnresolvedItemUpgradePathItem
-{
+for SnykContainerApplicationsItemRemediationUnresolvedItemUpgradePathItem {
     fn from(value: bool) -> Self {
         Self::Boolean(value)
     }
@@ -4442,8 +3628,7 @@ pub struct SnykContainerApplicationsItemRemediationUpgrade {
     >,
 }
 impl ::std::convert::From<&SnykContainerApplicationsItemRemediationUpgrade>
-    for SnykContainerApplicationsItemRemediationUpgrade
-{
+for SnykContainerApplicationsItemRemediationUpgrade {
     fn from(value: &SnykContainerApplicationsItemRemediationUpgrade) -> Self {
         value.clone()
     }
@@ -4496,11 +3681,9 @@ pub struct SnykContainerApplicationsItemRemediationUpgradeChQosLogbackLogbackCor
     #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
     pub vulns: ::std::vec::Vec<::std::string::String>,
 }
-impl
-    ::std::convert::From<
-        &SnykContainerApplicationsItemRemediationUpgradeChQosLogbackLogbackCore1513,
-    > for SnykContainerApplicationsItemRemediationUpgradeChQosLogbackLogbackCore1513
-{
+impl ::std::convert::From<
+    &SnykContainerApplicationsItemRemediationUpgradeChQosLogbackLogbackCore1513,
+> for SnykContainerApplicationsItemRemediationUpgradeChQosLogbackLogbackCore1513 {
     fn from(
         value: &SnykContainerApplicationsItemRemediationUpgradeChQosLogbackLogbackCore1513,
     ) -> Self {
@@ -4508,8 +3691,7 @@ impl
     }
 }
 impl ::std::default::Default
-    for SnykContainerApplicationsItemRemediationUpgradeChQosLogbackLogbackCore1513
-{
+for SnykContainerApplicationsItemRemediationUpgradeChQosLogbackLogbackCore1513 {
     fn default() -> Self {
         Self {
             upgrade_to: Default::default(),
@@ -4558,11 +3740,10 @@ pub struct SnykContainerApplicationsItemRemediationUpgradeOrgApacheTomcatEmbedTo
     #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
     pub vulns: ::std::vec::Vec<::std::string::String>,
 }
-impl
-    ::std::convert::From<
-        &SnykContainerApplicationsItemRemediationUpgradeOrgApacheTomcatEmbedTomcatEmbedCore10146,
-    > for SnykContainerApplicationsItemRemediationUpgradeOrgApacheTomcatEmbedTomcatEmbedCore10146
-{
+impl ::std::convert::From<
+    &SnykContainerApplicationsItemRemediationUpgradeOrgApacheTomcatEmbedTomcatEmbedCore10146,
+>
+for SnykContainerApplicationsItemRemediationUpgradeOrgApacheTomcatEmbedTomcatEmbedCore10146 {
     fn from(
         value: &SnykContainerApplicationsItemRemediationUpgradeOrgApacheTomcatEmbedTomcatEmbedCore10146,
     ) -> Self {
@@ -4570,1109 +3751,13 @@ impl
     }
 }
 impl ::std::default::Default
-    for SnykContainerApplicationsItemRemediationUpgradeOrgApacheTomcatEmbedTomcatEmbedCore10146
-{
+for SnykContainerApplicationsItemRemediationUpgradeOrgApacheTomcatEmbedTomcatEmbedCore10146 {
     fn default() -> Self {
         Self {
             upgrade_to: Default::default(),
             upgrades: Default::default(),
             vulns: Default::default(),
         }
-    }
-}
-///`SnykContainerApplicationsItemVulnerabilitiesItem`
-///
-/// <details><summary>JSON schema</summary>
-///
-/// ```json
-///{
-///  "type": "object",
-///  "properties": {
-///    "CVSSv3": {
-///      "type": "string"
-///    },
-///    "alternativeIds": {
-///      "type": "array"
-///    },
-///    "creationTime": {
-///      "type": "string"
-///    },
-///    "credit": {
-///      "type": "array",
-///      "items": {
-///        "type": "string"
-///      }
-///    },
-///    "cvssDetails": {
-///      "type": "array",
-///      "items": {
-///        "type": "object",
-///        "properties": {
-///          "assigner": {
-///            "type": "string"
-///          },
-///          "cvssV3BaseScore": {
-///            "type": "number"
-///          },
-///          "cvssV3Vector": {
-///            "type": "string"
-///          },
-///          "modificationTime": {
-///            "type": "string"
-///          },
-///          "severity": {
-///            "type": "string"
-///          }
-///        }
-///      }
-///    },
-///    "cvssScore": {
-///      "type": "number"
-///    },
-///    "cvssSources": {
-///      "type": "array",
-///      "items": {
-///        "type": "object",
-///        "properties": {
-///          "assigner": {
-///            "type": "string"
-///          },
-///          "baseScore": {
-///            "type": "number"
-///          },
-///          "cvssVersion": {
-///            "type": "string"
-///          },
-///          "modificationTime": {
-///            "type": "string"
-///          },
-///          "severity": {
-///            "type": "string"
-///          },
-///          "type": {
-///            "type": "string"
-///          },
-///          "vector": {
-///            "type": "string"
-///          }
-///        }
-///      }
-///    },
-///    "description": {
-///      "type": "string"
-///    },
-///    "disclosureTime": {
-///      "type": "string"
-///    },
-///    "epssDetails": {
-///      "type": "object",
-///      "properties": {
-///        "modelVersion": {
-///          "type": "string"
-///        },
-///        "percentile": {
-///          "type": "string"
-///        },
-///        "probability": {
-///          "type": "string"
-///        }
-///      }
-///    },
-///    "exploit": {
-///      "type": "string"
-///    },
-///    "exploitDetails": {
-///      "type": "object",
-///      "properties": {
-///        "maturityLevels": {
-///          "type": "array",
-///          "items": {
-///            "type": "object",
-///            "properties": {
-///              "format": {
-///                "type": "string"
-///              },
-///              "level": {
-///                "type": "string"
-///              },
-///              "type": {
-///                "type": "string"
-///              }
-///            }
-///          }
-///        },
-///        "sources": {
-///          "type": "array"
-///        }
-///      }
-///    },
-///    "fixedIn": {
-///      "type": "array",
-///      "items": {
-///        "type": "string"
-///      }
-///    },
-///    "from": {
-///      "type": "array",
-///      "items": {
-///        "type": "string"
-///      }
-///    },
-///    "functions": {
-///      "type": "array"
-///    },
-///    "functions_new": {
-///      "type": "array"
-///    },
-///    "id": {
-///      "type": "string"
-///    },
-///    "identifiers": {
-///      "type": "object",
-///      "properties": {
-///        "CVE": {
-///          "type": "array",
-///          "items": {
-///            "type": "string"
-///          }
-///        },
-///        "CWE": {
-///          "type": "array",
-///          "items": {
-///            "type": "string"
-///          }
-///        }
-///      }
-///    },
-///    "insights": {
-///      "type": "object",
-///      "properties": {
-///        "triageAdvice": {
-///          "type": "null"
-///        }
-///      }
-///    },
-///    "isDisputed": {
-///      "type": "boolean"
-///    },
-///    "isPatchable": {
-///      "type": "boolean"
-///    },
-///    "isUpgradable": {
-///      "type": "boolean"
-///    },
-///    "language": {
-///      "type": "string"
-///    },
-///    "malicious": {
-///      "type": "boolean"
-///    },
-///    "mavenModuleName": {
-///      "type": "object",
-///      "properties": {
-///        "artifactId": {
-///          "type": "string"
-///        },
-///        "groupId": {
-///          "type": "string"
-///        }
-///      }
-///    },
-///    "modificationTime": {
-///      "type": "string"
-///    },
-///    "moduleName": {
-///      "type": "string"
-///    },
-///    "name": {
-///      "type": "string"
-///    },
-///    "packageManager": {
-///      "type": "string"
-///    },
-///    "packageName": {
-///      "type": "string"
-///    },
-///    "patches": {
-///      "type": "array"
-///    },
-///    "proprietary": {
-///      "type": "boolean"
-///    },
-///    "publicationTime": {
-///      "type": "string"
-///    },
-///    "references": {
-///      "type": "array",
-///      "items": {
-///        "type": "object",
-///        "properties": {
-///          "title": {
-///            "type": "string"
-///          },
-///          "url": {
-///            "type": "string"
-///          }
-///        }
-///      }
-///    },
-///    "semver": {
-///      "type": "object",
-///      "properties": {
-///        "vulnerable": {
-///          "type": "array",
-///          "items": {
-///            "type": "string"
-///          }
-///        }
-///      }
-///    },
-///    "severity": {
-///      "type": "string"
-///    },
-///    "severityBasedOn": {
-///      "type": "string"
-///    },
-///    "severityWithCritical": {
-///      "type": "string"
-///    },
-///    "socialTrendAlert": {
-///      "type": "boolean"
-///    },
-///    "title": {
-///      "type": "string"
-///    },
-///    "upgradePath": {
-///      "type": "array",
-///      "items": {
-///        "type": [
-///          "boolean",
-///          "string"
-///        ]
-///      }
-///    },
-///    "version": {
-///      "type": "string"
-///    }
-///  }
-///}
-/// ```
-/// </details>
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
-pub struct SnykContainerApplicationsItemVulnerabilitiesItem {
-    #[serde(
-        rename = "alternativeIds",
-        default,
-        skip_serializing_if = "::std::vec::Vec::is_empty"
-    )]
-    pub alternative_ids: ::std::vec::Vec<::serde_json::Value>,
-    #[serde(
-        rename = "creationTime",
-        default,
-        skip_serializing_if = "::std::option::Option::is_none"
-    )]
-    pub creation_time: ::std::option::Option<::std::string::String>,
-    #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
-    pub credit: ::std::vec::Vec<::std::string::String>,
-    #[serde(
-        rename = "CVSSv3",
-        default,
-        skip_serializing_if = "::std::option::Option::is_none"
-    )]
-    pub cvs_sv3: ::std::option::Option<::std::string::String>,
-    #[serde(
-        rename = "cvssDetails",
-        default,
-        skip_serializing_if = "::std::vec::Vec::is_empty"
-    )]
-    pub cvss_details:
-        ::std::vec::Vec<SnykContainerApplicationsItemVulnerabilitiesItemCvssDetailsItem>,
-    #[serde(
-        rename = "cvssScore",
-        default,
-        skip_serializing_if = "::std::option::Option::is_none"
-    )]
-    pub cvss_score: ::std::option::Option<f64>,
-    #[serde(
-        rename = "cvssSources",
-        default,
-        skip_serializing_if = "::std::vec::Vec::is_empty"
-    )]
-    pub cvss_sources:
-        ::std::vec::Vec<SnykContainerApplicationsItemVulnerabilitiesItemCvssSourcesItem>,
-    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
-    pub description: ::std::option::Option<::std::string::String>,
-    #[serde(
-        rename = "disclosureTime",
-        default,
-        skip_serializing_if = "::std::option::Option::is_none"
-    )]
-    pub disclosure_time: ::std::option::Option<::std::string::String>,
-    #[serde(
-        rename = "epssDetails",
-        default,
-        skip_serializing_if = "::std::option::Option::is_none"
-    )]
-    pub epss_details:
-        ::std::option::Option<SnykContainerApplicationsItemVulnerabilitiesItemEpssDetails>,
-    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
-    pub exploit: ::std::option::Option<::std::string::String>,
-    #[serde(
-        rename = "exploitDetails",
-        default,
-        skip_serializing_if = "::std::option::Option::is_none"
-    )]
-    pub exploit_details:
-        ::std::option::Option<SnykContainerApplicationsItemVulnerabilitiesItemExploitDetails>,
-    #[serde(
-        rename = "fixedIn",
-        default,
-        skip_serializing_if = "::std::vec::Vec::is_empty"
-    )]
-    pub fixed_in: ::std::vec::Vec<::std::string::String>,
-    #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
-    pub from: ::std::vec::Vec<::std::string::String>,
-    #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
-    pub functions: ::std::vec::Vec<::serde_json::Value>,
-    #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
-    pub functions_new: ::std::vec::Vec<::serde_json::Value>,
-    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
-    pub id: ::std::option::Option<::std::string::String>,
-    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
-    pub identifiers:
-        ::std::option::Option<SnykContainerApplicationsItemVulnerabilitiesItemIdentifiers>,
-    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
-    pub insights: ::std::option::Option<SnykContainerApplicationsItemVulnerabilitiesItemInsights>,
-    #[serde(
-        rename = "isDisputed",
-        default,
-        skip_serializing_if = "::std::option::Option::is_none"
-    )]
-    pub is_disputed: ::std::option::Option<bool>,
-    #[serde(
-        rename = "isPatchable",
-        default,
-        skip_serializing_if = "::std::option::Option::is_none"
-    )]
-    pub is_patchable: ::std::option::Option<bool>,
-    #[serde(
-        rename = "isUpgradable",
-        default,
-        skip_serializing_if = "::std::option::Option::is_none"
-    )]
-    pub is_upgradable: ::std::option::Option<bool>,
-    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
-    pub language: ::std::option::Option<::std::string::String>,
-    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
-    pub malicious: ::std::option::Option<bool>,
-    #[serde(
-        rename = "mavenModuleName",
-        default,
-        skip_serializing_if = "::std::option::Option::is_none"
-    )]
-    pub maven_module_name:
-        ::std::option::Option<SnykContainerApplicationsItemVulnerabilitiesItemMavenModuleName>,
-    #[serde(
-        rename = "modificationTime",
-        default,
-        skip_serializing_if = "::std::option::Option::is_none"
-    )]
-    pub modification_time: ::std::option::Option<::std::string::String>,
-    #[serde(
-        rename = "moduleName",
-        default,
-        skip_serializing_if = "::std::option::Option::is_none"
-    )]
-    pub module_name: ::std::option::Option<::std::string::String>,
-    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
-    pub name: ::std::option::Option<::std::string::String>,
-    #[serde(
-        rename = "packageManager",
-        default,
-        skip_serializing_if = "::std::option::Option::is_none"
-    )]
-    pub package_manager: ::std::option::Option<::std::string::String>,
-    #[serde(
-        rename = "packageName",
-        default,
-        skip_serializing_if = "::std::option::Option::is_none"
-    )]
-    pub package_name: ::std::option::Option<::std::string::String>,
-    #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
-    pub patches: ::std::vec::Vec<::serde_json::Value>,
-    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
-    pub proprietary: ::std::option::Option<bool>,
-    #[serde(
-        rename = "publicationTime",
-        default,
-        skip_serializing_if = "::std::option::Option::is_none"
-    )]
-    pub publication_time: ::std::option::Option<::std::string::String>,
-    #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
-    pub references: ::std::vec::Vec<SnykContainerApplicationsItemVulnerabilitiesItemReferencesItem>,
-    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
-    pub semver: ::std::option::Option<SnykContainerApplicationsItemVulnerabilitiesItemSemver>,
-    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
-    pub severity: ::std::option::Option<::std::string::String>,
-    #[serde(
-        rename = "severityBasedOn",
-        default,
-        skip_serializing_if = "::std::option::Option::is_none"
-    )]
-    pub severity_based_on: ::std::option::Option<::std::string::String>,
-    #[serde(
-        rename = "severityWithCritical",
-        default,
-        skip_serializing_if = "::std::option::Option::is_none"
-    )]
-    pub severity_with_critical: ::std::option::Option<::std::string::String>,
-    #[serde(
-        rename = "socialTrendAlert",
-        default,
-        skip_serializing_if = "::std::option::Option::is_none"
-    )]
-    pub social_trend_alert: ::std::option::Option<bool>,
-    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
-    pub title: ::std::option::Option<::std::string::String>,
-    #[serde(
-        rename = "upgradePath",
-        default,
-        skip_serializing_if = "::std::vec::Vec::is_empty"
-    )]
-    pub upgrade_path:
-        ::std::vec::Vec<SnykContainerApplicationsItemVulnerabilitiesItemUpgradePathItem>,
-    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
-    pub version: ::std::option::Option<::std::string::String>,
-}
-impl ::std::convert::From<&SnykContainerApplicationsItemVulnerabilitiesItem>
-    for SnykContainerApplicationsItemVulnerabilitiesItem
-{
-    fn from(value: &SnykContainerApplicationsItemVulnerabilitiesItem) -> Self {
-        value.clone()
-    }
-}
-impl ::std::default::Default for SnykContainerApplicationsItemVulnerabilitiesItem {
-    fn default() -> Self {
-        Self {
-            alternative_ids: Default::default(),
-            creation_time: Default::default(),
-            credit: Default::default(),
-            cvs_sv3: Default::default(),
-            cvss_details: Default::default(),
-            cvss_score: Default::default(),
-            cvss_sources: Default::default(),
-            description: Default::default(),
-            disclosure_time: Default::default(),
-            epss_details: Default::default(),
-            exploit: Default::default(),
-            exploit_details: Default::default(),
-            fixed_in: Default::default(),
-            from: Default::default(),
-            functions: Default::default(),
-            functions_new: Default::default(),
-            id: Default::default(),
-            identifiers: Default::default(),
-            insights: Default::default(),
-            is_disputed: Default::default(),
-            is_patchable: Default::default(),
-            is_upgradable: Default::default(),
-            language: Default::default(),
-            malicious: Default::default(),
-            maven_module_name: Default::default(),
-            modification_time: Default::default(),
-            module_name: Default::default(),
-            name: Default::default(),
-            package_manager: Default::default(),
-            package_name: Default::default(),
-            patches: Default::default(),
-            proprietary: Default::default(),
-            publication_time: Default::default(),
-            references: Default::default(),
-            semver: Default::default(),
-            severity: Default::default(),
-            severity_based_on: Default::default(),
-            severity_with_critical: Default::default(),
-            social_trend_alert: Default::default(),
-            title: Default::default(),
-            upgrade_path: Default::default(),
-            version: Default::default(),
-        }
-    }
-}
-///`SnykContainerApplicationsItemVulnerabilitiesItemCvssDetailsItem`
-///
-/// <details><summary>JSON schema</summary>
-///
-/// ```json
-///{
-///  "type": "object",
-///  "properties": {
-///    "assigner": {
-///      "type": "string"
-///    },
-///    "cvssV3BaseScore": {
-///      "type": "number"
-///    },
-///    "cvssV3Vector": {
-///      "type": "string"
-///    },
-///    "modificationTime": {
-///      "type": "string"
-///    },
-///    "severity": {
-///      "type": "string"
-///    }
-///  }
-///}
-/// ```
-/// </details>
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
-pub struct SnykContainerApplicationsItemVulnerabilitiesItemCvssDetailsItem {
-    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
-    pub assigner: ::std::option::Option<::std::string::String>,
-    #[serde(
-        rename = "cvssV3BaseScore",
-        default,
-        skip_serializing_if = "::std::option::Option::is_none"
-    )]
-    pub cvss_v3_base_score: ::std::option::Option<f64>,
-    #[serde(
-        rename = "cvssV3Vector",
-        default,
-        skip_serializing_if = "::std::option::Option::is_none"
-    )]
-    pub cvss_v3_vector: ::std::option::Option<::std::string::String>,
-    #[serde(
-        rename = "modificationTime",
-        default,
-        skip_serializing_if = "::std::option::Option::is_none"
-    )]
-    pub modification_time: ::std::option::Option<::std::string::String>,
-    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
-    pub severity: ::std::option::Option<::std::string::String>,
-}
-impl ::std::convert::From<&SnykContainerApplicationsItemVulnerabilitiesItemCvssDetailsItem>
-    for SnykContainerApplicationsItemVulnerabilitiesItemCvssDetailsItem
-{
-    fn from(value: &SnykContainerApplicationsItemVulnerabilitiesItemCvssDetailsItem) -> Self {
-        value.clone()
-    }
-}
-impl ::std::default::Default for SnykContainerApplicationsItemVulnerabilitiesItemCvssDetailsItem {
-    fn default() -> Self {
-        Self {
-            assigner: Default::default(),
-            cvss_v3_base_score: Default::default(),
-            cvss_v3_vector: Default::default(),
-            modification_time: Default::default(),
-            severity: Default::default(),
-        }
-    }
-}
-///`SnykContainerApplicationsItemVulnerabilitiesItemCvssSourcesItem`
-///
-/// <details><summary>JSON schema</summary>
-///
-/// ```json
-///{
-///  "type": "object",
-///  "properties": {
-///    "assigner": {
-///      "type": "string"
-///    },
-///    "baseScore": {
-///      "type": "number"
-///    },
-///    "cvssVersion": {
-///      "type": "string"
-///    },
-///    "modificationTime": {
-///      "type": "string"
-///    },
-///    "severity": {
-///      "type": "string"
-///    },
-///    "type": {
-///      "type": "string"
-///    },
-///    "vector": {
-///      "type": "string"
-///    }
-///  }
-///}
-/// ```
-/// </details>
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
-pub struct SnykContainerApplicationsItemVulnerabilitiesItemCvssSourcesItem {
-    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
-    pub assigner: ::std::option::Option<::std::string::String>,
-    #[serde(
-        rename = "baseScore",
-        default,
-        skip_serializing_if = "::std::option::Option::is_none"
-    )]
-    pub base_score: ::std::option::Option<f64>,
-    #[serde(
-        rename = "cvssVersion",
-        default,
-        skip_serializing_if = "::std::option::Option::is_none"
-    )]
-    pub cvss_version: ::std::option::Option<::std::string::String>,
-    #[serde(
-        rename = "modificationTime",
-        default,
-        skip_serializing_if = "::std::option::Option::is_none"
-    )]
-    pub modification_time: ::std::option::Option<::std::string::String>,
-    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
-    pub severity: ::std::option::Option<::std::string::String>,
-    #[serde(
-        rename = "type",
-        default,
-        skip_serializing_if = "::std::option::Option::is_none"
-    )]
-    pub type_: ::std::option::Option<::std::string::String>,
-    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
-    pub vector: ::std::option::Option<::std::string::String>,
-}
-impl ::std::convert::From<&SnykContainerApplicationsItemVulnerabilitiesItemCvssSourcesItem>
-    for SnykContainerApplicationsItemVulnerabilitiesItemCvssSourcesItem
-{
-    fn from(value: &SnykContainerApplicationsItemVulnerabilitiesItemCvssSourcesItem) -> Self {
-        value.clone()
-    }
-}
-impl ::std::default::Default for SnykContainerApplicationsItemVulnerabilitiesItemCvssSourcesItem {
-    fn default() -> Self {
-        Self {
-            assigner: Default::default(),
-            base_score: Default::default(),
-            cvss_version: Default::default(),
-            modification_time: Default::default(),
-            severity: Default::default(),
-            type_: Default::default(),
-            vector: Default::default(),
-        }
-    }
-}
-///`SnykContainerApplicationsItemVulnerabilitiesItemEpssDetails`
-///
-/// <details><summary>JSON schema</summary>
-///
-/// ```json
-///{
-///  "type": "object",
-///  "properties": {
-///    "modelVersion": {
-///      "type": "string"
-///    },
-///    "percentile": {
-///      "type": "string"
-///    },
-///    "probability": {
-///      "type": "string"
-///    }
-///  }
-///}
-/// ```
-/// </details>
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
-pub struct SnykContainerApplicationsItemVulnerabilitiesItemEpssDetails {
-    #[serde(
-        rename = "modelVersion",
-        default,
-        skip_serializing_if = "::std::option::Option::is_none"
-    )]
-    pub model_version: ::std::option::Option<::std::string::String>,
-    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
-    pub percentile: ::std::option::Option<::std::string::String>,
-    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
-    pub probability: ::std::option::Option<::std::string::String>,
-}
-impl ::std::convert::From<&SnykContainerApplicationsItemVulnerabilitiesItemEpssDetails>
-    for SnykContainerApplicationsItemVulnerabilitiesItemEpssDetails
-{
-    fn from(value: &SnykContainerApplicationsItemVulnerabilitiesItemEpssDetails) -> Self {
-        value.clone()
-    }
-}
-impl ::std::default::Default for SnykContainerApplicationsItemVulnerabilitiesItemEpssDetails {
-    fn default() -> Self {
-        Self {
-            model_version: Default::default(),
-            percentile: Default::default(),
-            probability: Default::default(),
-        }
-    }
-}
-///`SnykContainerApplicationsItemVulnerabilitiesItemExploitDetails`
-///
-/// <details><summary>JSON schema</summary>
-///
-/// ```json
-///{
-///  "type": "object",
-///  "properties": {
-///    "maturityLevels": {
-///      "type": "array",
-///      "items": {
-///        "type": "object",
-///        "properties": {
-///          "format": {
-///            "type": "string"
-///          },
-///          "level": {
-///            "type": "string"
-///          },
-///          "type": {
-///            "type": "string"
-///          }
-///        }
-///      }
-///    },
-///    "sources": {
-///      "type": "array"
-///    }
-///  }
-///}
-/// ```
-/// </details>
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
-pub struct SnykContainerApplicationsItemVulnerabilitiesItemExploitDetails {
-    #[serde(
-        rename = "maturityLevels",
-        default,
-        skip_serializing_if = "::std::vec::Vec::is_empty"
-    )]
-    pub maturity_levels: ::std::vec::Vec<
-        SnykContainerApplicationsItemVulnerabilitiesItemExploitDetailsMaturityLevelsItem,
-    >,
-    #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
-    pub sources: ::std::vec::Vec<::serde_json::Value>,
-}
-impl ::std::convert::From<&SnykContainerApplicationsItemVulnerabilitiesItemExploitDetails>
-    for SnykContainerApplicationsItemVulnerabilitiesItemExploitDetails
-{
-    fn from(value: &SnykContainerApplicationsItemVulnerabilitiesItemExploitDetails) -> Self {
-        value.clone()
-    }
-}
-impl ::std::default::Default for SnykContainerApplicationsItemVulnerabilitiesItemExploitDetails {
-    fn default() -> Self {
-        Self {
-            maturity_levels: Default::default(),
-            sources: Default::default(),
-        }
-    }
-}
-///`SnykContainerApplicationsItemVulnerabilitiesItemExploitDetailsMaturityLevelsItem`
-///
-/// <details><summary>JSON schema</summary>
-///
-/// ```json
-///{
-///  "type": "object",
-///  "properties": {
-///    "format": {
-///      "type": "string"
-///    },
-///    "level": {
-///      "type": "string"
-///    },
-///    "type": {
-///      "type": "string"
-///    }
-///  }
-///}
-/// ```
-/// </details>
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
-pub struct SnykContainerApplicationsItemVulnerabilitiesItemExploitDetailsMaturityLevelsItem {
-    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
-    pub format: ::std::option::Option<::std::string::String>,
-    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
-    pub level: ::std::option::Option<::std::string::String>,
-    #[serde(
-        rename = "type",
-        default,
-        skip_serializing_if = "::std::option::Option::is_none"
-    )]
-    pub type_: ::std::option::Option<::std::string::String>,
-}
-impl
-    ::std::convert::From<
-        &SnykContainerApplicationsItemVulnerabilitiesItemExploitDetailsMaturityLevelsItem,
-    > for SnykContainerApplicationsItemVulnerabilitiesItemExploitDetailsMaturityLevelsItem
-{
-    fn from(
-        value: &SnykContainerApplicationsItemVulnerabilitiesItemExploitDetailsMaturityLevelsItem,
-    ) -> Self {
-        value.clone()
-    }
-}
-impl ::std::default::Default
-    for SnykContainerApplicationsItemVulnerabilitiesItemExploitDetailsMaturityLevelsItem
-{
-    fn default() -> Self {
-        Self {
-            format: Default::default(),
-            level: Default::default(),
-            type_: Default::default(),
-        }
-    }
-}
-///`SnykContainerApplicationsItemVulnerabilitiesItemIdentifiers`
-///
-/// <details><summary>JSON schema</summary>
-///
-/// ```json
-///{
-///  "type": "object",
-///  "properties": {
-///    "CVE": {
-///      "type": "array",
-///      "items": {
-///        "type": "string"
-///      }
-///    },
-///    "CWE": {
-///      "type": "array",
-///      "items": {
-///        "type": "string"
-///      }
-///    }
-///  }
-///}
-/// ```
-/// </details>
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
-pub struct SnykContainerApplicationsItemVulnerabilitiesItemIdentifiers {
-    #[serde(
-        rename = "CVE",
-        default,
-        skip_serializing_if = "::std::vec::Vec::is_empty"
-    )]
-    pub cve: ::std::vec::Vec<::std::string::String>,
-    #[serde(
-        rename = "CWE",
-        default,
-        skip_serializing_if = "::std::vec::Vec::is_empty"
-    )]
-    pub cwe: ::std::vec::Vec<::std::string::String>,
-}
-impl ::std::convert::From<&SnykContainerApplicationsItemVulnerabilitiesItemIdentifiers>
-    for SnykContainerApplicationsItemVulnerabilitiesItemIdentifiers
-{
-    fn from(value: &SnykContainerApplicationsItemVulnerabilitiesItemIdentifiers) -> Self {
-        value.clone()
-    }
-}
-impl ::std::default::Default for SnykContainerApplicationsItemVulnerabilitiesItemIdentifiers {
-    fn default() -> Self {
-        Self {
-            cve: Default::default(),
-            cwe: Default::default(),
-        }
-    }
-}
-///`SnykContainerApplicationsItemVulnerabilitiesItemInsights`
-///
-/// <details><summary>JSON schema</summary>
-///
-/// ```json
-///{
-///  "type": "object",
-///  "properties": {
-///    "triageAdvice": {
-///      "type": "null"
-///    }
-///  }
-///}
-/// ```
-/// </details>
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
-pub struct SnykContainerApplicationsItemVulnerabilitiesItemInsights {
-    #[serde(rename = "triageAdvice", default)]
-    pub triage_advice: (),
-}
-impl ::std::convert::From<&SnykContainerApplicationsItemVulnerabilitiesItemInsights>
-    for SnykContainerApplicationsItemVulnerabilitiesItemInsights
-{
-    fn from(value: &SnykContainerApplicationsItemVulnerabilitiesItemInsights) -> Self {
-        value.clone()
-    }
-}
-impl ::std::default::Default for SnykContainerApplicationsItemVulnerabilitiesItemInsights {
-    fn default() -> Self {
-        Self {
-            triage_advice: Default::default(),
-        }
-    }
-}
-///`SnykContainerApplicationsItemVulnerabilitiesItemMavenModuleName`
-///
-/// <details><summary>JSON schema</summary>
-///
-/// ```json
-///{
-///  "type": "object",
-///  "properties": {
-///    "artifactId": {
-///      "type": "string"
-///    },
-///    "groupId": {
-///      "type": "string"
-///    }
-///  }
-///}
-/// ```
-/// </details>
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
-pub struct SnykContainerApplicationsItemVulnerabilitiesItemMavenModuleName {
-    #[serde(
-        rename = "artifactId",
-        default,
-        skip_serializing_if = "::std::option::Option::is_none"
-    )]
-    pub artifact_id: ::std::option::Option<::std::string::String>,
-    #[serde(
-        rename = "groupId",
-        default,
-        skip_serializing_if = "::std::option::Option::is_none"
-    )]
-    pub group_id: ::std::option::Option<::std::string::String>,
-}
-impl ::std::convert::From<&SnykContainerApplicationsItemVulnerabilitiesItemMavenModuleName>
-    for SnykContainerApplicationsItemVulnerabilitiesItemMavenModuleName
-{
-    fn from(value: &SnykContainerApplicationsItemVulnerabilitiesItemMavenModuleName) -> Self {
-        value.clone()
-    }
-}
-impl ::std::default::Default for SnykContainerApplicationsItemVulnerabilitiesItemMavenModuleName {
-    fn default() -> Self {
-        Self {
-            artifact_id: Default::default(),
-            group_id: Default::default(),
-        }
-    }
-}
-///`SnykContainerApplicationsItemVulnerabilitiesItemReferencesItem`
-///
-/// <details><summary>JSON schema</summary>
-///
-/// ```json
-///{
-///  "type": "object",
-///  "properties": {
-///    "title": {
-///      "type": "string"
-///    },
-///    "url": {
-///      "type": "string"
-///    }
-///  }
-///}
-/// ```
-/// </details>
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
-pub struct SnykContainerApplicationsItemVulnerabilitiesItemReferencesItem {
-    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
-    pub title: ::std::option::Option<::std::string::String>,
-    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
-    pub url: ::std::option::Option<::std::string::String>,
-}
-impl ::std::convert::From<&SnykContainerApplicationsItemVulnerabilitiesItemReferencesItem>
-    for SnykContainerApplicationsItemVulnerabilitiesItemReferencesItem
-{
-    fn from(value: &SnykContainerApplicationsItemVulnerabilitiesItemReferencesItem) -> Self {
-        value.clone()
-    }
-}
-impl ::std::default::Default for SnykContainerApplicationsItemVulnerabilitiesItemReferencesItem {
-    fn default() -> Self {
-        Self {
-            title: Default::default(),
-            url: Default::default(),
-        }
-    }
-}
-///`SnykContainerApplicationsItemVulnerabilitiesItemSemver`
-///
-/// <details><summary>JSON schema</summary>
-///
-/// ```json
-///{
-///  "type": "object",
-///  "properties": {
-///    "vulnerable": {
-///      "type": "array",
-///      "items": {
-///        "type": "string"
-///      }
-///    }
-///  }
-///}
-/// ```
-/// </details>
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
-pub struct SnykContainerApplicationsItemVulnerabilitiesItemSemver {
-    #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
-    pub vulnerable: ::std::vec::Vec<::std::string::String>,
-}
-impl ::std::convert::From<&SnykContainerApplicationsItemVulnerabilitiesItemSemver>
-    for SnykContainerApplicationsItemVulnerabilitiesItemSemver
-{
-    fn from(value: &SnykContainerApplicationsItemVulnerabilitiesItemSemver) -> Self {
-        value.clone()
-    }
-}
-impl ::std::default::Default for SnykContainerApplicationsItemVulnerabilitiesItemSemver {
-    fn default() -> Self {
-        Self {
-            vulnerable: Default::default(),
-        }
-    }
-}
-///`SnykContainerApplicationsItemVulnerabilitiesItemUpgradePathItem`
-///
-/// <details><summary>JSON schema</summary>
-///
-/// ```json
-///{
-///  "type": [
-///    "boolean",
-///    "string"
-///  ]
-///}
-/// ```
-/// </details>
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
-#[serde(untagged)]
-pub enum SnykContainerApplicationsItemVulnerabilitiesItemUpgradePathItem {
-    Boolean(bool),
-    String(::std::string::String),
-}
-impl ::std::convert::From<&Self>
-    for SnykContainerApplicationsItemVulnerabilitiesItemUpgradePathItem
-{
-    fn from(value: &SnykContainerApplicationsItemVulnerabilitiesItemUpgradePathItem) -> Self {
-        value.clone()
-    }
-}
-impl ::std::fmt::Display for SnykContainerApplicationsItemVulnerabilitiesItemUpgradePathItem {
-    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
-        match self {
-            Self::Boolean(x) => x.fmt(f),
-            Self::String(x) => x.fmt(f),
-        }
-    }
-}
-impl ::std::convert::From<bool>
-    for SnykContainerApplicationsItemVulnerabilitiesItemUpgradePathItem
-{
-    fn from(value: bool) -> Self {
-        Self::Boolean(value)
     }
 }
 ///`SnykContainerDocker`
@@ -5744,7 +3829,9 @@ pub struct SnykContainerDocker {
         default,
         skip_serializing_if = "::std::option::Option::is_none"
     )]
-    pub base_image_remediation: ::std::option::Option<SnykContainerDockerBaseImageRemediation>,
+    pub base_image_remediation: ::std::option::Option<
+        SnykContainerDockerBaseImageRemediation,
+    >,
     #[serde(
         rename = "binariesVulns",
         default,
@@ -5806,8 +3893,7 @@ pub struct SnykContainerDockerBaseImageRemediation {
     pub code: ::std::option::Option<::std::string::String>,
 }
 impl ::std::convert::From<&SnykContainerDockerBaseImageRemediation>
-    for SnykContainerDockerBaseImageRemediation
-{
+for SnykContainerDockerBaseImageRemediation {
     fn from(value: &SnykContainerDockerBaseImageRemediation) -> Self {
         value.clone()
     }
@@ -5846,8 +3932,7 @@ pub struct SnykContainerDockerBaseImageRemediationAdviceItem {
     pub message: ::std::option::Option<::std::string::String>,
 }
 impl ::std::convert::From<&SnykContainerDockerBaseImageRemediationAdviceItem>
-    for SnykContainerDockerBaseImageRemediationAdviceItem
-{
+for SnykContainerDockerBaseImageRemediationAdviceItem {
     fn from(value: &SnykContainerDockerBaseImageRemediationAdviceItem) -> Self {
         value.clone()
     }
@@ -5893,7 +3978,8 @@ pub struct SnykContainerDockerBinariesVulns {
     )]
     pub issues_data: ::serde_json::Map<::std::string::String, ::serde_json::Value>,
 }
-impl ::std::convert::From<&SnykContainerDockerBinariesVulns> for SnykContainerDockerBinariesVulns {
+impl ::std::convert::From<&SnykContainerDockerBinariesVulns>
+for SnykContainerDockerBinariesVulns {
     fn from(value: &SnykContainerDockerBinariesVulns) -> Self {
         value.clone()
     }
@@ -5939,100 +4025,6 @@ impl ::std::default::Default for SnykContainerDockerOs {
     fn default() -> Self {
         Self {
             pretty_name: Default::default(),
-        }
-    }
-}
-///`SnykContainerFiltered`
-///
-/// <details><summary>JSON schema</summary>
-///
-/// ```json
-///{
-///  "type": "object",
-///  "properties": {
-///    "ignore": {
-///      "type": "array"
-///    },
-///    "patch": {
-///      "type": "array"
-///    }
-///  }
-///}
-/// ```
-/// </details>
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
-pub struct SnykContainerFiltered {
-    #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
-    pub ignore: ::std::vec::Vec<::serde_json::Value>,
-    #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
-    pub patch: ::std::vec::Vec<::serde_json::Value>,
-}
-impl ::std::convert::From<&SnykContainerFiltered> for SnykContainerFiltered {
-    fn from(value: &SnykContainerFiltered) -> Self {
-        value.clone()
-    }
-}
-impl ::std::default::Default for SnykContainerFiltered {
-    fn default() -> Self {
-        Self {
-            ignore: Default::default(),
-            patch: Default::default(),
-        }
-    }
-}
-///`SnykContainerIgnoreSettings`
-///
-/// <details><summary>JSON schema</summary>
-///
-/// ```json
-///{
-///  "type": "object",
-///  "properties": {
-///    "adminOnly": {
-///      "type": "boolean"
-///    },
-///    "disregardFilesystemIgnores": {
-///      "type": "boolean"
-///    },
-///    "reasonRequired": {
-///      "type": "boolean"
-///    }
-///  }
-///}
-/// ```
-/// </details>
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
-pub struct SnykContainerIgnoreSettings {
-    #[serde(
-        rename = "adminOnly",
-        default,
-        skip_serializing_if = "::std::option::Option::is_none"
-    )]
-    pub admin_only: ::std::option::Option<bool>,
-    #[serde(
-        rename = "disregardFilesystemIgnores",
-        default,
-        skip_serializing_if = "::std::option::Option::is_none"
-    )]
-    pub disregard_filesystem_ignores: ::std::option::Option<bool>,
-    #[serde(
-        rename = "reasonRequired",
-        default,
-        skip_serializing_if = "::std::option::Option::is_none"
-    )]
-    pub reason_required: ::std::option::Option<bool>,
-}
-impl ::std::convert::From<&SnykContainerIgnoreSettings> for SnykContainerIgnoreSettings {
-    fn from(value: &SnykContainerIgnoreSettings) -> Self {
-        value.clone()
-    }
-}
-impl ::std::default::Default for SnykContainerIgnoreSettings {
-    fn default() -> Self {
-        Self {
-            admin_only: Default::default(),
-            disregard_filesystem_ignores: Default::default(),
-            reason_required: Default::default(),
         }
     }
 }
@@ -6287,7 +4279,9 @@ pub struct SnykContainerLicensesPolicy {
         default,
         skip_serializing_if = "::std::option::Option::is_none"
     )]
-    pub org_license_rules: ::std::option::Option<SnykContainerLicensesPolicyOrgLicenseRules>,
+    pub org_license_rules: ::std::option::Option<
+        SnykContainerLicensesPolicyOrgLicenseRules,
+    >,
     #[serde(default, skip_serializing_if = "::serde_json::Map::is_empty")]
     pub severities: ::serde_json::Map<::std::string::String, ::serde_json::Value>,
 }
@@ -6547,37 +4541,49 @@ pub struct SnykContainerLicensesPolicyOrgLicenseRules {
         default,
         skip_serializing_if = "::std::option::Option::is_none"
     )]
-    pub agpl_1_0: ::std::option::Option<SnykContainerLicensesPolicyOrgLicenseRulesAgpl10>,
+    pub agpl_1_0: ::std::option::Option<
+        SnykContainerLicensesPolicyOrgLicenseRulesAgpl10,
+    >,
     #[serde(
         rename = "AGPL-3.0",
         default,
         skip_serializing_if = "::std::option::Option::is_none"
     )]
-    pub agpl_3_0: ::std::option::Option<SnykContainerLicensesPolicyOrgLicenseRulesAgpl30>,
+    pub agpl_3_0: ::std::option::Option<
+        SnykContainerLicensesPolicyOrgLicenseRulesAgpl30,
+    >,
     #[serde(
         rename = "Artistic-1.0",
         default,
         skip_serializing_if = "::std::option::Option::is_none"
     )]
-    pub artistic_1_0: ::std::option::Option<SnykContainerLicensesPolicyOrgLicenseRulesArtistic10>,
+    pub artistic_1_0: ::std::option::Option<
+        SnykContainerLicensesPolicyOrgLicenseRulesArtistic10,
+    >,
     #[serde(
         rename = "Artistic-2.0",
         default,
         skip_serializing_if = "::std::option::Option::is_none"
     )]
-    pub artistic_2_0: ::std::option::Option<SnykContainerLicensesPolicyOrgLicenseRulesArtistic20>,
+    pub artistic_2_0: ::std::option::Option<
+        SnykContainerLicensesPolicyOrgLicenseRulesArtistic20,
+    >,
     #[serde(
         rename = "CDDL-1.0",
         default,
         skip_serializing_if = "::std::option::Option::is_none"
     )]
-    pub cddl_1_0: ::std::option::Option<SnykContainerLicensesPolicyOrgLicenseRulesCddl10>,
+    pub cddl_1_0: ::std::option::Option<
+        SnykContainerLicensesPolicyOrgLicenseRulesCddl10,
+    >,
     #[serde(
         rename = "CPOL-1.02",
         default,
         skip_serializing_if = "::std::option::Option::is_none"
     )]
-    pub cpol_1_02: ::std::option::Option<SnykContainerLicensesPolicyOrgLicenseRulesCpol102>,
+    pub cpol_1_02: ::std::option::Option<
+        SnykContainerLicensesPolicyOrgLicenseRulesCpol102,
+    >,
     #[serde(
         rename = "EPL-1.0",
         default,
@@ -6601,19 +4607,25 @@ pub struct SnykContainerLicensesPolicyOrgLicenseRules {
         default,
         skip_serializing_if = "::std::option::Option::is_none"
     )]
-    pub lgpl_2_0: ::std::option::Option<SnykContainerLicensesPolicyOrgLicenseRulesLgpl20>,
+    pub lgpl_2_0: ::std::option::Option<
+        SnykContainerLicensesPolicyOrgLicenseRulesLgpl20,
+    >,
     #[serde(
         rename = "LGPL-2.1",
         default,
         skip_serializing_if = "::std::option::Option::is_none"
     )]
-    pub lgpl_2_1: ::std::option::Option<SnykContainerLicensesPolicyOrgLicenseRulesLgpl21>,
+    pub lgpl_2_1: ::std::option::Option<
+        SnykContainerLicensesPolicyOrgLicenseRulesLgpl21,
+    >,
     #[serde(
         rename = "LGPL-3.0",
         default,
         skip_serializing_if = "::std::option::Option::is_none"
     )]
-    pub lgpl_3_0: ::std::option::Option<SnykContainerLicensesPolicyOrgLicenseRulesLgpl30>,
+    pub lgpl_3_0: ::std::option::Option<
+        SnykContainerLicensesPolicyOrgLicenseRulesLgpl30,
+    >,
     #[serde(
         rename = "MPL-1.1",
         default,
@@ -6637,11 +4649,12 @@ pub struct SnykContainerLicensesPolicyOrgLicenseRules {
         default,
         skip_serializing_if = "::std::option::Option::is_none"
     )]
-    pub sim_pl_2_0: ::std::option::Option<SnykContainerLicensesPolicyOrgLicenseRulesSimPl20>,
+    pub sim_pl_2_0: ::std::option::Option<
+        SnykContainerLicensesPolicyOrgLicenseRulesSimPl20,
+    >,
 }
 impl ::std::convert::From<&SnykContainerLicensesPolicyOrgLicenseRules>
-    for SnykContainerLicensesPolicyOrgLicenseRules
-{
+for SnykContainerLicensesPolicyOrgLicenseRules {
     fn from(value: &SnykContainerLicensesPolicyOrgLicenseRules) -> Self {
         value.clone()
     }
@@ -6703,8 +4716,7 @@ pub struct SnykContainerLicensesPolicyOrgLicenseRulesAgpl10 {
     pub severity: ::std::option::Option<::std::string::String>,
 }
 impl ::std::convert::From<&SnykContainerLicensesPolicyOrgLicenseRulesAgpl10>
-    for SnykContainerLicensesPolicyOrgLicenseRulesAgpl10
-{
+for SnykContainerLicensesPolicyOrgLicenseRulesAgpl10 {
     fn from(value: &SnykContainerLicensesPolicyOrgLicenseRulesAgpl10) -> Self {
         value.clone()
     }
@@ -6753,8 +4765,7 @@ pub struct SnykContainerLicensesPolicyOrgLicenseRulesAgpl30 {
     pub severity: ::std::option::Option<::std::string::String>,
 }
 impl ::std::convert::From<&SnykContainerLicensesPolicyOrgLicenseRulesAgpl30>
-    for SnykContainerLicensesPolicyOrgLicenseRulesAgpl30
-{
+for SnykContainerLicensesPolicyOrgLicenseRulesAgpl30 {
     fn from(value: &SnykContainerLicensesPolicyOrgLicenseRulesAgpl30) -> Self {
         value.clone()
     }
@@ -6803,8 +4814,7 @@ pub struct SnykContainerLicensesPolicyOrgLicenseRulesArtistic10 {
     pub severity: ::std::option::Option<::std::string::String>,
 }
 impl ::std::convert::From<&SnykContainerLicensesPolicyOrgLicenseRulesArtistic10>
-    for SnykContainerLicensesPolicyOrgLicenseRulesArtistic10
-{
+for SnykContainerLicensesPolicyOrgLicenseRulesArtistic10 {
     fn from(value: &SnykContainerLicensesPolicyOrgLicenseRulesArtistic10) -> Self {
         value.clone()
     }
@@ -6853,8 +4863,7 @@ pub struct SnykContainerLicensesPolicyOrgLicenseRulesArtistic20 {
     pub severity: ::std::option::Option<::std::string::String>,
 }
 impl ::std::convert::From<&SnykContainerLicensesPolicyOrgLicenseRulesArtistic20>
-    for SnykContainerLicensesPolicyOrgLicenseRulesArtistic20
-{
+for SnykContainerLicensesPolicyOrgLicenseRulesArtistic20 {
     fn from(value: &SnykContainerLicensesPolicyOrgLicenseRulesArtistic20) -> Self {
         value.clone()
     }
@@ -6903,8 +4912,7 @@ pub struct SnykContainerLicensesPolicyOrgLicenseRulesCddl10 {
     pub severity: ::std::option::Option<::std::string::String>,
 }
 impl ::std::convert::From<&SnykContainerLicensesPolicyOrgLicenseRulesCddl10>
-    for SnykContainerLicensesPolicyOrgLicenseRulesCddl10
-{
+for SnykContainerLicensesPolicyOrgLicenseRulesCddl10 {
     fn from(value: &SnykContainerLicensesPolicyOrgLicenseRulesCddl10) -> Self {
         value.clone()
     }
@@ -6953,8 +4961,7 @@ pub struct SnykContainerLicensesPolicyOrgLicenseRulesCpol102 {
     pub severity: ::std::option::Option<::std::string::String>,
 }
 impl ::std::convert::From<&SnykContainerLicensesPolicyOrgLicenseRulesCpol102>
-    for SnykContainerLicensesPolicyOrgLicenseRulesCpol102
-{
+for SnykContainerLicensesPolicyOrgLicenseRulesCpol102 {
     fn from(value: &SnykContainerLicensesPolicyOrgLicenseRulesCpol102) -> Self {
         value.clone()
     }
@@ -7003,8 +5010,7 @@ pub struct SnykContainerLicensesPolicyOrgLicenseRulesEpl10 {
     pub severity: ::std::option::Option<::std::string::String>,
 }
 impl ::std::convert::From<&SnykContainerLicensesPolicyOrgLicenseRulesEpl10>
-    for SnykContainerLicensesPolicyOrgLicenseRulesEpl10
-{
+for SnykContainerLicensesPolicyOrgLicenseRulesEpl10 {
     fn from(value: &SnykContainerLicensesPolicyOrgLicenseRulesEpl10) -> Self {
         value.clone()
     }
@@ -7053,8 +5059,7 @@ pub struct SnykContainerLicensesPolicyOrgLicenseRulesGpl20 {
     pub severity: ::std::option::Option<::std::string::String>,
 }
 impl ::std::convert::From<&SnykContainerLicensesPolicyOrgLicenseRulesGpl20>
-    for SnykContainerLicensesPolicyOrgLicenseRulesGpl20
-{
+for SnykContainerLicensesPolicyOrgLicenseRulesGpl20 {
     fn from(value: &SnykContainerLicensesPolicyOrgLicenseRulesGpl20) -> Self {
         value.clone()
     }
@@ -7103,8 +5108,7 @@ pub struct SnykContainerLicensesPolicyOrgLicenseRulesGpl30 {
     pub severity: ::std::option::Option<::std::string::String>,
 }
 impl ::std::convert::From<&SnykContainerLicensesPolicyOrgLicenseRulesGpl30>
-    for SnykContainerLicensesPolicyOrgLicenseRulesGpl30
-{
+for SnykContainerLicensesPolicyOrgLicenseRulesGpl30 {
     fn from(value: &SnykContainerLicensesPolicyOrgLicenseRulesGpl30) -> Self {
         value.clone()
     }
@@ -7153,8 +5157,7 @@ pub struct SnykContainerLicensesPolicyOrgLicenseRulesLgpl20 {
     pub severity: ::std::option::Option<::std::string::String>,
 }
 impl ::std::convert::From<&SnykContainerLicensesPolicyOrgLicenseRulesLgpl20>
-    for SnykContainerLicensesPolicyOrgLicenseRulesLgpl20
-{
+for SnykContainerLicensesPolicyOrgLicenseRulesLgpl20 {
     fn from(value: &SnykContainerLicensesPolicyOrgLicenseRulesLgpl20) -> Self {
         value.clone()
     }
@@ -7203,8 +5206,7 @@ pub struct SnykContainerLicensesPolicyOrgLicenseRulesLgpl21 {
     pub severity: ::std::option::Option<::std::string::String>,
 }
 impl ::std::convert::From<&SnykContainerLicensesPolicyOrgLicenseRulesLgpl21>
-    for SnykContainerLicensesPolicyOrgLicenseRulesLgpl21
-{
+for SnykContainerLicensesPolicyOrgLicenseRulesLgpl21 {
     fn from(value: &SnykContainerLicensesPolicyOrgLicenseRulesLgpl21) -> Self {
         value.clone()
     }
@@ -7253,8 +5255,7 @@ pub struct SnykContainerLicensesPolicyOrgLicenseRulesLgpl30 {
     pub severity: ::std::option::Option<::std::string::String>,
 }
 impl ::std::convert::From<&SnykContainerLicensesPolicyOrgLicenseRulesLgpl30>
-    for SnykContainerLicensesPolicyOrgLicenseRulesLgpl30
-{
+for SnykContainerLicensesPolicyOrgLicenseRulesLgpl30 {
     fn from(value: &SnykContainerLicensesPolicyOrgLicenseRulesLgpl30) -> Self {
         value.clone()
     }
@@ -7303,8 +5304,7 @@ pub struct SnykContainerLicensesPolicyOrgLicenseRulesMpl11 {
     pub severity: ::std::option::Option<::std::string::String>,
 }
 impl ::std::convert::From<&SnykContainerLicensesPolicyOrgLicenseRulesMpl11>
-    for SnykContainerLicensesPolicyOrgLicenseRulesMpl11
-{
+for SnykContainerLicensesPolicyOrgLicenseRulesMpl11 {
     fn from(value: &SnykContainerLicensesPolicyOrgLicenseRulesMpl11) -> Self {
         value.clone()
     }
@@ -7353,8 +5353,7 @@ pub struct SnykContainerLicensesPolicyOrgLicenseRulesMpl20 {
     pub severity: ::std::option::Option<::std::string::String>,
 }
 impl ::std::convert::From<&SnykContainerLicensesPolicyOrgLicenseRulesMpl20>
-    for SnykContainerLicensesPolicyOrgLicenseRulesMpl20
-{
+for SnykContainerLicensesPolicyOrgLicenseRulesMpl20 {
     fn from(value: &SnykContainerLicensesPolicyOrgLicenseRulesMpl20) -> Self {
         value.clone()
     }
@@ -7403,8 +5402,7 @@ pub struct SnykContainerLicensesPolicyOrgLicenseRulesMsRl {
     pub severity: ::std::option::Option<::std::string::String>,
 }
 impl ::std::convert::From<&SnykContainerLicensesPolicyOrgLicenseRulesMsRl>
-    for SnykContainerLicensesPolicyOrgLicenseRulesMsRl
-{
+for SnykContainerLicensesPolicyOrgLicenseRulesMsRl {
     fn from(value: &SnykContainerLicensesPolicyOrgLicenseRulesMsRl) -> Self {
         value.clone()
     }
@@ -7453,8 +5451,7 @@ pub struct SnykContainerLicensesPolicyOrgLicenseRulesSimPl20 {
     pub severity: ::std::option::Option<::std::string::String>,
 }
 impl ::std::convert::From<&SnykContainerLicensesPolicyOrgLicenseRulesSimPl20>
-    for SnykContainerLicensesPolicyOrgLicenseRulesSimPl20
-{
+for SnykContainerLicensesPolicyOrgLicenseRulesSimPl20 {
     fn from(value: &SnykContainerLicensesPolicyOrgLicenseRulesSimPl20) -> Self {
         value.clone()
     }
@@ -7468,7 +5465,327 @@ impl ::std::default::Default for SnykContainerLicensesPolicyOrgLicenseRulesSimPl
         }
     }
 }
-///`SnykContainerVulnerabilitiesItem`
+///`Vulnerabilities`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "array",
+///  "items": {
+///    "type": "object",
+///    "properties": {
+///      "CVSSv3": {
+///        "type": "string"
+///      },
+///      "alternativeIds": {
+///        "type": "array"
+///      },
+///      "cpes": {
+///        "type": "array"
+///      },
+///      "creationTime": {
+///        "type": "string"
+///      },
+///      "credit": {
+///        "type": "array",
+///        "items": {
+///          "type": "string"
+///        }
+///      },
+///      "cvssDetails": {
+///        "type": "array",
+///        "items": {
+///          "type": "object",
+///          "properties": {
+///            "assigner": {
+///              "type": "string"
+///            },
+///            "cvssV3BaseScore": {
+///              "type": "number"
+///            },
+///            "cvssV3Vector": {
+///              "type": "string"
+///            },
+///            "modificationTime": {
+///              "type": "string"
+///            },
+///            "severity": {
+///              "type": "string"
+///            }
+///          }
+///        }
+///      },
+///      "cvssScore": {
+///        "type": "number"
+///      },
+///      "cvssSources": {
+///        "type": "array",
+///        "items": {
+///          "type": "object",
+///          "properties": {
+///            "assigner": {
+///              "type": "string"
+///            },
+///            "baseScore": {
+///              "type": "number"
+///            },
+///            "cvssVersion": {
+///              "type": "string"
+///            },
+///            "modificationTime": {
+///              "type": "string"
+///            },
+///            "severity": {
+///              "type": "string"
+///            },
+///            "type": {
+///              "type": "string"
+///            },
+///            "vector": {
+///              "type": "string"
+///            }
+///          }
+///        }
+///      },
+///      "description": {
+///        "type": "string"
+///      },
+///      "disclosureTime": {
+///        "type": "string"
+///      },
+///      "dockerBaseImage": {
+///        "type": "string"
+///      },
+///      "epssDetails": {
+///        "type": "object",
+///        "properties": {
+///          "modelVersion": {
+///            "type": "string"
+///          },
+///          "percentile": {
+///            "type": "string"
+///          },
+///          "probability": {
+///            "type": "string"
+///          }
+///        }
+///      },
+///      "exploit": {
+///        "type": "string"
+///      },
+///      "exploitDetails": {
+///        "type": "object",
+///        "properties": {
+///          "maturityLevels": {
+///            "type": "array",
+///            "items": {
+///              "type": "object",
+///              "properties": {
+///                "format": {
+///                  "type": "string"
+///                },
+///                "level": {
+///                  "type": "string"
+///                },
+///                "type": {
+///                  "type": "string"
+///                }
+///              }
+///            }
+///          },
+///          "sources": {
+///            "type": "array"
+///          }
+///        }
+///      },
+///      "fixedIn": {
+///        "type": "array",
+///        "items": {
+///          "type": "string"
+///        }
+///      },
+///      "from": {
+///        "type": "array",
+///        "items": {
+///          "type": "string"
+///        }
+///      },
+///      "functions": {
+///        "type": "array"
+///      },
+///      "functions_new": {
+///        "type": "array"
+///      },
+///      "id": {
+///        "type": "string"
+///      },
+///      "identifiers": {
+///        "type": "object",
+///        "properties": {
+///          "CVE": {
+///            "type": "array",
+///            "items": {
+///              "type": "string"
+///            }
+///          },
+///          "CWE": {
+///            "type": "array",
+///            "items": {
+///              "type": "string"
+///            }
+///          }
+///        },
+///        "ALTERNATIVE": {
+///          "type": "array"
+///        }
+///      },
+///      "insights": {
+///        "type": "object",
+///        "properties": {
+///          "triageAdvice": {
+///            "type": "null"
+///          }
+///        }
+///      },
+///      "isDisputed": {
+///        "type": "boolean"
+///      },
+///      "isPatchable": {
+///        "type": "boolean"
+///      },
+///      "isUpgradable": {
+///        "type": "boolean"
+///      },
+///      "language": {
+///        "type": "string"
+///      },
+///      "malicious": {
+///        "type": "boolean"
+///      },
+///      "mavenModuleName": {
+///        "type": "object",
+///        "properties": {
+///          "artifactId": {
+///            "type": "string"
+///          },
+///          "groupId": {
+///            "type": "string"
+///          }
+///        }
+///      },
+///      "modificationTime": {
+///        "type": "string"
+///      },
+///      "moduleName": {
+///        "type": "string"
+///      },
+///      "name": {
+///        "type": "string"
+///      },
+///      "nvdSeverity": {
+///        "type": "string"
+///      },
+///      "packageManager": {
+///        "type": "string"
+///      },
+///      "packageName": {
+///        "type": "string"
+///      },
+///      "patches": {
+///        "type": "array"
+///      },
+///      "proprietary": {
+///        "type": "boolean"
+///      },
+///      "publicationTime": {
+///        "type": "string"
+///      },
+///      "references": {
+///        "type": "array",
+///        "items": {
+///          "type": "object",
+///          "properties": {
+///            "title": {
+///              "type": "string"
+///            },
+///            "url": {
+///              "type": "string"
+///            }
+///          }
+///        }
+///      },
+///      "relativeImportance": {
+///        "type": "string"
+///      },
+///      "semver": {
+///        "type": "object",
+///        "properties": {
+///          "vulnerable": {
+///            "type": "array",
+///            "items": {
+///              "type": "string"
+///            }
+///          }
+///        }
+///      },
+///      "severity": {
+///        "type": "string"
+///      },
+///      "severityBasedOn": {
+///        "type": "string"
+///      },
+///      "severityWithCritical": {
+///        "type": "string"
+///      },
+///      "socialTrendAlert": {
+///        "type": "boolean"
+///      },
+///      "title": {
+///        "type": "string"
+///      },
+///      "upgradePath": {
+///        "type": "array",
+///        "items": {
+///          "type": [
+///            "boolean",
+///            "string"
+///          ]
+///        }
+///      },
+///      "version": {
+///        "type": "string"
+///      }
+///    }
+///  }
+///}
+/// ```
+/// </details>
+#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
+#[serde(transparent)]
+pub struct Vulnerabilities(pub ::std::vec::Vec<VulnerabilitiesItem>);
+impl ::std::ops::Deref for Vulnerabilities {
+    type Target = ::std::vec::Vec<VulnerabilitiesItem>;
+    fn deref(&self) -> &::std::vec::Vec<VulnerabilitiesItem> {
+        &self.0
+    }
+}
+impl ::std::convert::From<Vulnerabilities> for ::std::vec::Vec<VulnerabilitiesItem> {
+    fn from(value: Vulnerabilities) -> Self {
+        value.0
+    }
+}
+impl ::std::convert::From<&Vulnerabilities> for Vulnerabilities {
+    fn from(value: &Vulnerabilities) -> Self {
+        value.clone()
+    }
+}
+impl ::std::convert::From<::std::vec::Vec<VulnerabilitiesItem>> for Vulnerabilities {
+    fn from(value: ::std::vec::Vec<VulnerabilitiesItem>) -> Self {
+        Self(value)
+    }
+}
+///`VulnerabilitiesItem`
 ///
 /// <details><summary>JSON schema</summary>
 ///
@@ -7478,6 +5795,9 @@ impl ::std::default::Default for SnykContainerLicensesPolicyOrgLicenseRulesSimPl
 ///  "properties": {
 ///    "CVSSv3": {
 ///      "type": "string"
+///    },
+///    "alternativeIds": {
+///      "type": "array"
 ///    },
 ///    "cpes": {
 ///      "type": "array"
@@ -7598,7 +5918,10 @@ impl ::std::default::Default for SnykContainerLicensesPolicyOrgLicenseRulesSimPl
 ///      }
 ///    },
 ///    "fixedIn": {
-///      "type": "array"
+///      "type": "array",
+///      "items": {
+///        "type": "string"
+///      }
 ///    },
 ///    "from": {
 ///      "type": "array",
@@ -7606,15 +5929,18 @@ impl ::std::default::Default for SnykContainerLicensesPolicyOrgLicenseRulesSimPl
 ///        "type": "string"
 ///      }
 ///    },
+///    "functions": {
+///      "type": "array"
+///    },
+///    "functions_new": {
+///      "type": "array"
+///    },
 ///    "id": {
 ///      "type": "string"
 ///    },
 ///    "identifiers": {
 ///      "type": "object",
 ///      "properties": {
-///        "ALTERNATIVE": {
-///          "type": "array"
-///        },
 ///        "CVE": {
 ///          "type": "array",
 ///          "items": {
@@ -7627,6 +5953,9 @@ impl ::std::default::Default for SnykContainerLicensesPolicyOrgLicenseRulesSimPl
 ///            "type": "string"
 ///          }
 ///        }
+///      },
+///      "ALTERNATIVE": {
+///        "type": "array"
 ///      }
 ///    },
 ///    "insights": {
@@ -7652,7 +5981,21 @@ impl ::std::default::Default for SnykContainerLicensesPolicyOrgLicenseRulesSimPl
 ///    "malicious": {
 ///      "type": "boolean"
 ///    },
+///    "mavenModuleName": {
+///      "type": "object",
+///      "properties": {
+///        "artifactId": {
+///          "type": "string"
+///        },
+///        "groupId": {
+///          "type": "string"
+///        }
+///      }
+///    },
 ///    "modificationTime": {
+///      "type": "string"
+///    },
+///    "moduleName": {
 ///      "type": "string"
 ///    },
 ///    "name": {
@@ -7669,6 +6012,9 @@ impl ::std::default::Default for SnykContainerLicensesPolicyOrgLicenseRulesSimPl
 ///    },
 ///    "patches": {
 ///      "type": "array"
+///    },
+///    "proprietary": {
+///      "type": "boolean"
 ///    },
 ///    "publicationTime": {
 ///      "type": "string"
@@ -7733,7 +6079,13 @@ impl ::std::default::Default for SnykContainerLicensesPolicyOrgLicenseRulesSimPl
 /// ```
 /// </details>
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
-pub struct SnykContainerVulnerabilitiesItem {
+pub struct VulnerabilitiesItem {
+    #[serde(
+        rename = "alternativeIds",
+        default,
+        skip_serializing_if = "::std::vec::Vec::is_empty"
+    )]
+    pub alternative_ids: ::std::vec::Vec<::serde_json::Value>,
     #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
     pub cpes: ::std::vec::Vec<::serde_json::Value>,
     #[serde(
@@ -7755,7 +6107,7 @@ pub struct SnykContainerVulnerabilitiesItem {
         default,
         skip_serializing_if = "::std::vec::Vec::is_empty"
     )]
-    pub cvss_details: ::std::vec::Vec<SnykContainerVulnerabilitiesItemCvssDetailsItem>,
+    pub cvss_details: ::std::vec::Vec<VulnerabilitiesItemCvssDetailsItem>,
     #[serde(
         rename = "cvssScore",
         default,
@@ -7767,7 +6119,7 @@ pub struct SnykContainerVulnerabilitiesItem {
         default,
         skip_serializing_if = "::std::vec::Vec::is_empty"
     )]
-    pub cvss_sources: ::std::vec::Vec<SnykContainerVulnerabilitiesItemCvssSourcesItem>,
+    pub cvss_sources: ::std::vec::Vec<VulnerabilitiesItemCvssSourcesItem>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub description: ::std::option::Option<::std::string::String>,
     #[serde(
@@ -7787,7 +6139,7 @@ pub struct SnykContainerVulnerabilitiesItem {
         default,
         skip_serializing_if = "::std::option::Option::is_none"
     )]
-    pub epss_details: ::std::option::Option<SnykContainerVulnerabilitiesItemEpssDetails>,
+    pub epss_details: ::std::option::Option<VulnerabilitiesItemEpssDetails>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub exploit: ::std::option::Option<::std::string::String>,
     #[serde(
@@ -7795,21 +6147,25 @@ pub struct SnykContainerVulnerabilitiesItem {
         default,
         skip_serializing_if = "::std::option::Option::is_none"
     )]
-    pub exploit_details: ::std::option::Option<SnykContainerVulnerabilitiesItemExploitDetails>,
+    pub exploit_details: ::std::option::Option<VulnerabilitiesItemExploitDetails>,
     #[serde(
         rename = "fixedIn",
         default,
         skip_serializing_if = "::std::vec::Vec::is_empty"
     )]
-    pub fixed_in: ::std::vec::Vec<::serde_json::Value>,
+    pub fixed_in: ::std::vec::Vec<::std::string::String>,
     #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
     pub from: ::std::vec::Vec<::std::string::String>,
+    #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
+    pub functions: ::std::vec::Vec<::serde_json::Value>,
+    #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
+    pub functions_new: ::std::vec::Vec<::serde_json::Value>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub id: ::std::option::Option<::std::string::String>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
-    pub identifiers: ::std::option::Option<SnykContainerVulnerabilitiesItemIdentifiers>,
+    pub identifiers: ::std::option::Option<VulnerabilitiesItemIdentifiers>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
-    pub insights: ::std::option::Option<SnykContainerVulnerabilitiesItemInsights>,
+    pub insights: ::std::option::Option<VulnerabilitiesItemInsights>,
     #[serde(
         rename = "isDisputed",
         default,
@@ -7833,11 +6189,23 @@ pub struct SnykContainerVulnerabilitiesItem {
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub malicious: ::std::option::Option<bool>,
     #[serde(
+        rename = "mavenModuleName",
+        default,
+        skip_serializing_if = "::std::option::Option::is_none"
+    )]
+    pub maven_module_name: ::std::option::Option<VulnerabilitiesItemMavenModuleName>,
+    #[serde(
         rename = "modificationTime",
         default,
         skip_serializing_if = "::std::option::Option::is_none"
     )]
     pub modification_time: ::std::option::Option<::std::string::String>,
+    #[serde(
+        rename = "moduleName",
+        default,
+        skip_serializing_if = "::std::option::Option::is_none"
+    )]
+    pub module_name: ::std::option::Option<::std::string::String>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub name: ::std::option::Option<::std::string::String>,
     #[serde(
@@ -7860,6 +6228,8 @@ pub struct SnykContainerVulnerabilitiesItem {
     pub package_name: ::std::option::Option<::std::string::String>,
     #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
     pub patches: ::std::vec::Vec<::serde_json::Value>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub proprietary: ::std::option::Option<bool>,
     #[serde(
         rename = "publicationTime",
         default,
@@ -7867,7 +6237,7 @@ pub struct SnykContainerVulnerabilitiesItem {
     )]
     pub publication_time: ::std::option::Option<::std::string::String>,
     #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
-    pub references: ::std::vec::Vec<SnykContainerVulnerabilitiesItemReferencesItem>,
+    pub references: ::std::vec::Vec<VulnerabilitiesItemReferencesItem>,
     #[serde(
         rename = "relativeImportance",
         default,
@@ -7875,7 +6245,7 @@ pub struct SnykContainerVulnerabilitiesItem {
     )]
     pub relative_importance: ::std::option::Option<::std::string::String>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
-    pub semver: ::std::option::Option<SnykContainerVulnerabilitiesItemSemver>,
+    pub semver: ::std::option::Option<VulnerabilitiesItemSemver>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub severity: ::std::option::Option<::std::string::String>,
     #[serde(
@@ -7903,18 +6273,19 @@ pub struct SnykContainerVulnerabilitiesItem {
         default,
         skip_serializing_if = "::std::vec::Vec::is_empty"
     )]
-    pub upgrade_path: ::std::vec::Vec<SnykContainerVulnerabilitiesItemUpgradePathItem>,
+    pub upgrade_path: ::std::vec::Vec<VulnerabilitiesItemUpgradePathItem>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub version: ::std::option::Option<::std::string::String>,
 }
-impl ::std::convert::From<&SnykContainerVulnerabilitiesItem> for SnykContainerVulnerabilitiesItem {
-    fn from(value: &SnykContainerVulnerabilitiesItem) -> Self {
+impl ::std::convert::From<&VulnerabilitiesItem> for VulnerabilitiesItem {
+    fn from(value: &VulnerabilitiesItem) -> Self {
         value.clone()
     }
 }
-impl ::std::default::Default for SnykContainerVulnerabilitiesItem {
+impl ::std::default::Default for VulnerabilitiesItem {
     fn default() -> Self {
         Self {
+            alternative_ids: Default::default(),
             cpes: Default::default(),
             creation_time: Default::default(),
             credit: Default::default(),
@@ -7930,6 +6301,8 @@ impl ::std::default::Default for SnykContainerVulnerabilitiesItem {
             exploit_details: Default::default(),
             fixed_in: Default::default(),
             from: Default::default(),
+            functions: Default::default(),
+            functions_new: Default::default(),
             id: Default::default(),
             identifiers: Default::default(),
             insights: Default::default(),
@@ -7938,12 +6311,15 @@ impl ::std::default::Default for SnykContainerVulnerabilitiesItem {
             is_upgradable: Default::default(),
             language: Default::default(),
             malicious: Default::default(),
+            maven_module_name: Default::default(),
             modification_time: Default::default(),
+            module_name: Default::default(),
             name: Default::default(),
             nvd_severity: Default::default(),
             package_manager: Default::default(),
             package_name: Default::default(),
             patches: Default::default(),
+            proprietary: Default::default(),
             publication_time: Default::default(),
             references: Default::default(),
             relative_importance: Default::default(),
@@ -7958,7 +6334,7 @@ impl ::std::default::Default for SnykContainerVulnerabilitiesItem {
         }
     }
 }
-///`SnykContainerVulnerabilitiesItemCvssDetailsItem`
+///`VulnerabilitiesItemCvssDetailsItem`
 ///
 /// <details><summary>JSON schema</summary>
 ///
@@ -7986,7 +6362,7 @@ impl ::std::default::Default for SnykContainerVulnerabilitiesItem {
 /// ```
 /// </details>
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
-pub struct SnykContainerVulnerabilitiesItemCvssDetailsItem {
+pub struct VulnerabilitiesItemCvssDetailsItem {
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub assigner: ::std::option::Option<::std::string::String>,
     #[serde(
@@ -8010,14 +6386,13 @@ pub struct SnykContainerVulnerabilitiesItemCvssDetailsItem {
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub severity: ::std::option::Option<::std::string::String>,
 }
-impl ::std::convert::From<&SnykContainerVulnerabilitiesItemCvssDetailsItem>
-    for SnykContainerVulnerabilitiesItemCvssDetailsItem
-{
-    fn from(value: &SnykContainerVulnerabilitiesItemCvssDetailsItem) -> Self {
+impl ::std::convert::From<&VulnerabilitiesItemCvssDetailsItem>
+for VulnerabilitiesItemCvssDetailsItem {
+    fn from(value: &VulnerabilitiesItemCvssDetailsItem) -> Self {
         value.clone()
     }
 }
-impl ::std::default::Default for SnykContainerVulnerabilitiesItemCvssDetailsItem {
+impl ::std::default::Default for VulnerabilitiesItemCvssDetailsItem {
     fn default() -> Self {
         Self {
             assigner: Default::default(),
@@ -8028,7 +6403,7 @@ impl ::std::default::Default for SnykContainerVulnerabilitiesItemCvssDetailsItem
         }
     }
 }
-///`SnykContainerVulnerabilitiesItemCvssSourcesItem`
+///`VulnerabilitiesItemCvssSourcesItem`
 ///
 /// <details><summary>JSON schema</summary>
 ///
@@ -8062,7 +6437,7 @@ impl ::std::default::Default for SnykContainerVulnerabilitiesItemCvssDetailsItem
 /// ```
 /// </details>
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
-pub struct SnykContainerVulnerabilitiesItemCvssSourcesItem {
+pub struct VulnerabilitiesItemCvssSourcesItem {
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub assigner: ::std::option::Option<::std::string::String>,
     #[serde(
@@ -8094,14 +6469,13 @@ pub struct SnykContainerVulnerabilitiesItemCvssSourcesItem {
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub vector: ::std::option::Option<::std::string::String>,
 }
-impl ::std::convert::From<&SnykContainerVulnerabilitiesItemCvssSourcesItem>
-    for SnykContainerVulnerabilitiesItemCvssSourcesItem
-{
-    fn from(value: &SnykContainerVulnerabilitiesItemCvssSourcesItem) -> Self {
+impl ::std::convert::From<&VulnerabilitiesItemCvssSourcesItem>
+for VulnerabilitiesItemCvssSourcesItem {
+    fn from(value: &VulnerabilitiesItemCvssSourcesItem) -> Self {
         value.clone()
     }
 }
-impl ::std::default::Default for SnykContainerVulnerabilitiesItemCvssSourcesItem {
+impl ::std::default::Default for VulnerabilitiesItemCvssSourcesItem {
     fn default() -> Self {
         Self {
             assigner: Default::default(),
@@ -8114,7 +6488,7 @@ impl ::std::default::Default for SnykContainerVulnerabilitiesItemCvssSourcesItem
         }
     }
 }
-///`SnykContainerVulnerabilitiesItemEpssDetails`
+///`VulnerabilitiesItemEpssDetails`
 ///
 /// <details><summary>JSON schema</summary>
 ///
@@ -8136,7 +6510,7 @@ impl ::std::default::Default for SnykContainerVulnerabilitiesItemCvssSourcesItem
 /// ```
 /// </details>
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
-pub struct SnykContainerVulnerabilitiesItemEpssDetails {
+pub struct VulnerabilitiesItemEpssDetails {
     #[serde(
         rename = "modelVersion",
         default,
@@ -8148,14 +6522,13 @@ pub struct SnykContainerVulnerabilitiesItemEpssDetails {
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub probability: ::std::option::Option<::std::string::String>,
 }
-impl ::std::convert::From<&SnykContainerVulnerabilitiesItemEpssDetails>
-    for SnykContainerVulnerabilitiesItemEpssDetails
-{
-    fn from(value: &SnykContainerVulnerabilitiesItemEpssDetails) -> Self {
+impl ::std::convert::From<&VulnerabilitiesItemEpssDetails>
+for VulnerabilitiesItemEpssDetails {
+    fn from(value: &VulnerabilitiesItemEpssDetails) -> Self {
         value.clone()
     }
 }
-impl ::std::default::Default for SnykContainerVulnerabilitiesItemEpssDetails {
+impl ::std::default::Default for VulnerabilitiesItemEpssDetails {
     fn default() -> Self {
         Self {
             model_version: Default::default(),
@@ -8164,7 +6537,7 @@ impl ::std::default::Default for SnykContainerVulnerabilitiesItemEpssDetails {
         }
     }
 }
-///`SnykContainerVulnerabilitiesItemExploitDetails`
+///`VulnerabilitiesItemExploitDetails`
 ///
 /// <details><summary>JSON schema</summary>
 ///
@@ -8197,25 +6570,25 @@ impl ::std::default::Default for SnykContainerVulnerabilitiesItemEpssDetails {
 /// ```
 /// </details>
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
-pub struct SnykContainerVulnerabilitiesItemExploitDetails {
+pub struct VulnerabilitiesItemExploitDetails {
     #[serde(
         rename = "maturityLevels",
         default,
         skip_serializing_if = "::std::vec::Vec::is_empty"
     )]
-    pub maturity_levels:
-        ::std::vec::Vec<SnykContainerVulnerabilitiesItemExploitDetailsMaturityLevelsItem>,
+    pub maturity_levels: ::std::vec::Vec<
+        VulnerabilitiesItemExploitDetailsMaturityLevelsItem,
+    >,
     #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
     pub sources: ::std::vec::Vec<::serde_json::Value>,
 }
-impl ::std::convert::From<&SnykContainerVulnerabilitiesItemExploitDetails>
-    for SnykContainerVulnerabilitiesItemExploitDetails
-{
-    fn from(value: &SnykContainerVulnerabilitiesItemExploitDetails) -> Self {
+impl ::std::convert::From<&VulnerabilitiesItemExploitDetails>
+for VulnerabilitiesItemExploitDetails {
+    fn from(value: &VulnerabilitiesItemExploitDetails) -> Self {
         value.clone()
     }
 }
-impl ::std::default::Default for SnykContainerVulnerabilitiesItemExploitDetails {
+impl ::std::default::Default for VulnerabilitiesItemExploitDetails {
     fn default() -> Self {
         Self {
             maturity_levels: Default::default(),
@@ -8223,7 +6596,7 @@ impl ::std::default::Default for SnykContainerVulnerabilitiesItemExploitDetails 
         }
     }
 }
-///`SnykContainerVulnerabilitiesItemExploitDetailsMaturityLevelsItem`
+///`VulnerabilitiesItemExploitDetailsMaturityLevelsItem`
 ///
 /// <details><summary>JSON schema</summary>
 ///
@@ -8245,7 +6618,7 @@ impl ::std::default::Default for SnykContainerVulnerabilitiesItemExploitDetails 
 /// ```
 /// </details>
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
-pub struct SnykContainerVulnerabilitiesItemExploitDetailsMaturityLevelsItem {
+pub struct VulnerabilitiesItemExploitDetailsMaturityLevelsItem {
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub format: ::std::option::Option<::std::string::String>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
@@ -8257,14 +6630,13 @@ pub struct SnykContainerVulnerabilitiesItemExploitDetailsMaturityLevelsItem {
     )]
     pub type_: ::std::option::Option<::std::string::String>,
 }
-impl ::std::convert::From<&SnykContainerVulnerabilitiesItemExploitDetailsMaturityLevelsItem>
-    for SnykContainerVulnerabilitiesItemExploitDetailsMaturityLevelsItem
-{
-    fn from(value: &SnykContainerVulnerabilitiesItemExploitDetailsMaturityLevelsItem) -> Self {
+impl ::std::convert::From<&VulnerabilitiesItemExploitDetailsMaturityLevelsItem>
+for VulnerabilitiesItemExploitDetailsMaturityLevelsItem {
+    fn from(value: &VulnerabilitiesItemExploitDetailsMaturityLevelsItem) -> Self {
         value.clone()
     }
 }
-impl ::std::default::Default for SnykContainerVulnerabilitiesItemExploitDetailsMaturityLevelsItem {
+impl ::std::default::Default for VulnerabilitiesItemExploitDetailsMaturityLevelsItem {
     fn default() -> Self {
         Self {
             format: Default::default(),
@@ -8273,7 +6645,7 @@ impl ::std::default::Default for SnykContainerVulnerabilitiesItemExploitDetailsM
         }
     }
 }
-///`SnykContainerVulnerabilitiesItemIdentifiers`
+///`VulnerabilitiesItemIdentifiers`
 ///
 /// <details><summary>JSON schema</summary>
 ///
@@ -8281,9 +6653,6 @@ impl ::std::default::Default for SnykContainerVulnerabilitiesItemExploitDetailsM
 ///{
 ///  "type": "object",
 ///  "properties": {
-///    "ALTERNATIVE": {
-///      "type": "array"
-///    },
 ///    "CVE": {
 ///      "type": "array",
 ///      "items": {
@@ -8296,48 +6665,35 @@ impl ::std::default::Default for SnykContainerVulnerabilitiesItemExploitDetailsM
 ///        "type": "string"
 ///      }
 ///    }
+///  },
+///  "ALTERNATIVE": {
+///    "type": "array"
 ///  }
 ///}
 /// ```
 /// </details>
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
-pub struct SnykContainerVulnerabilitiesItemIdentifiers {
-    #[serde(
-        rename = "ALTERNATIVE",
-        default,
-        skip_serializing_if = "::std::vec::Vec::is_empty"
-    )]
-    pub alternative: ::std::vec::Vec<::serde_json::Value>,
-    #[serde(
-        rename = "CVE",
-        default,
-        skip_serializing_if = "::std::vec::Vec::is_empty"
-    )]
+pub struct VulnerabilitiesItemIdentifiers {
+    #[serde(rename = "CVE", default, skip_serializing_if = "::std::vec::Vec::is_empty")]
     pub cve: ::std::vec::Vec<::std::string::String>,
-    #[serde(
-        rename = "CWE",
-        default,
-        skip_serializing_if = "::std::vec::Vec::is_empty"
-    )]
+    #[serde(rename = "CWE", default, skip_serializing_if = "::std::vec::Vec::is_empty")]
     pub cwe: ::std::vec::Vec<::std::string::String>,
 }
-impl ::std::convert::From<&SnykContainerVulnerabilitiesItemIdentifiers>
-    for SnykContainerVulnerabilitiesItemIdentifiers
-{
-    fn from(value: &SnykContainerVulnerabilitiesItemIdentifiers) -> Self {
+impl ::std::convert::From<&VulnerabilitiesItemIdentifiers>
+for VulnerabilitiesItemIdentifiers {
+    fn from(value: &VulnerabilitiesItemIdentifiers) -> Self {
         value.clone()
     }
 }
-impl ::std::default::Default for SnykContainerVulnerabilitiesItemIdentifiers {
+impl ::std::default::Default for VulnerabilitiesItemIdentifiers {
     fn default() -> Self {
         Self {
-            alternative: Default::default(),
             cve: Default::default(),
             cwe: Default::default(),
         }
     }
 }
-///`SnykContainerVulnerabilitiesItemInsights`
+///`VulnerabilitiesItemInsights`
 ///
 /// <details><summary>JSON schema</summary>
 ///
@@ -8353,25 +6709,70 @@ impl ::std::default::Default for SnykContainerVulnerabilitiesItemIdentifiers {
 /// ```
 /// </details>
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
-pub struct SnykContainerVulnerabilitiesItemInsights {
+pub struct VulnerabilitiesItemInsights {
     #[serde(rename = "triageAdvice", default)]
     pub triage_advice: (),
 }
-impl ::std::convert::From<&SnykContainerVulnerabilitiesItemInsights>
-    for SnykContainerVulnerabilitiesItemInsights
-{
-    fn from(value: &SnykContainerVulnerabilitiesItemInsights) -> Self {
+impl ::std::convert::From<&VulnerabilitiesItemInsights> for VulnerabilitiesItemInsights {
+    fn from(value: &VulnerabilitiesItemInsights) -> Self {
         value.clone()
     }
 }
-impl ::std::default::Default for SnykContainerVulnerabilitiesItemInsights {
+impl ::std::default::Default for VulnerabilitiesItemInsights {
     fn default() -> Self {
         Self {
             triage_advice: Default::default(),
         }
     }
 }
-///`SnykContainerVulnerabilitiesItemReferencesItem`
+///`VulnerabilitiesItemMavenModuleName`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "object",
+///  "properties": {
+///    "artifactId": {
+///      "type": "string"
+///    },
+///    "groupId": {
+///      "type": "string"
+///    }
+///  }
+///}
+/// ```
+/// </details>
+#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
+pub struct VulnerabilitiesItemMavenModuleName {
+    #[serde(
+        rename = "artifactId",
+        default,
+        skip_serializing_if = "::std::option::Option::is_none"
+    )]
+    pub artifact_id: ::std::option::Option<::std::string::String>,
+    #[serde(
+        rename = "groupId",
+        default,
+        skip_serializing_if = "::std::option::Option::is_none"
+    )]
+    pub group_id: ::std::option::Option<::std::string::String>,
+}
+impl ::std::convert::From<&VulnerabilitiesItemMavenModuleName>
+for VulnerabilitiesItemMavenModuleName {
+    fn from(value: &VulnerabilitiesItemMavenModuleName) -> Self {
+        value.clone()
+    }
+}
+impl ::std::default::Default for VulnerabilitiesItemMavenModuleName {
+    fn default() -> Self {
+        Self {
+            artifact_id: Default::default(),
+            group_id: Default::default(),
+        }
+    }
+}
+///`VulnerabilitiesItemReferencesItem`
 ///
 /// <details><summary>JSON schema</summary>
 ///
@@ -8390,20 +6791,19 @@ impl ::std::default::Default for SnykContainerVulnerabilitiesItemInsights {
 /// ```
 /// </details>
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
-pub struct SnykContainerVulnerabilitiesItemReferencesItem {
+pub struct VulnerabilitiesItemReferencesItem {
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub title: ::std::option::Option<::std::string::String>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub url: ::std::option::Option<::std::string::String>,
 }
-impl ::std::convert::From<&SnykContainerVulnerabilitiesItemReferencesItem>
-    for SnykContainerVulnerabilitiesItemReferencesItem
-{
-    fn from(value: &SnykContainerVulnerabilitiesItemReferencesItem) -> Self {
+impl ::std::convert::From<&VulnerabilitiesItemReferencesItem>
+for VulnerabilitiesItemReferencesItem {
+    fn from(value: &VulnerabilitiesItemReferencesItem) -> Self {
         value.clone()
     }
 }
-impl ::std::default::Default for SnykContainerVulnerabilitiesItemReferencesItem {
+impl ::std::default::Default for VulnerabilitiesItemReferencesItem {
     fn default() -> Self {
         Self {
             title: Default::default(),
@@ -8411,7 +6811,7 @@ impl ::std::default::Default for SnykContainerVulnerabilitiesItemReferencesItem 
         }
     }
 }
-///`SnykContainerVulnerabilitiesItemSemver`
+///`VulnerabilitiesItemSemver`
 ///
 /// <details><summary>JSON schema</summary>
 ///
@@ -8430,25 +6830,23 @@ impl ::std::default::Default for SnykContainerVulnerabilitiesItemReferencesItem 
 /// ```
 /// </details>
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
-pub struct SnykContainerVulnerabilitiesItemSemver {
+pub struct VulnerabilitiesItemSemver {
     #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
     pub vulnerable: ::std::vec::Vec<::std::string::String>,
 }
-impl ::std::convert::From<&SnykContainerVulnerabilitiesItemSemver>
-    for SnykContainerVulnerabilitiesItemSemver
-{
-    fn from(value: &SnykContainerVulnerabilitiesItemSemver) -> Self {
+impl ::std::convert::From<&VulnerabilitiesItemSemver> for VulnerabilitiesItemSemver {
+    fn from(value: &VulnerabilitiesItemSemver) -> Self {
         value.clone()
     }
 }
-impl ::std::default::Default for SnykContainerVulnerabilitiesItemSemver {
+impl ::std::default::Default for VulnerabilitiesItemSemver {
     fn default() -> Self {
         Self {
             vulnerable: Default::default(),
         }
     }
 }
-///`SnykContainerVulnerabilitiesItemUpgradePathItem`
+///`VulnerabilitiesItemUpgradePathItem`
 ///
 /// <details><summary>JSON schema</summary>
 ///
@@ -8463,16 +6861,16 @@ impl ::std::default::Default for SnykContainerVulnerabilitiesItemSemver {
 /// </details>
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
 #[serde(untagged)]
-pub enum SnykContainerVulnerabilitiesItemUpgradePathItem {
+pub enum VulnerabilitiesItemUpgradePathItem {
     Boolean(bool),
     String(::std::string::String),
 }
-impl ::std::convert::From<&Self> for SnykContainerVulnerabilitiesItemUpgradePathItem {
-    fn from(value: &SnykContainerVulnerabilitiesItemUpgradePathItem) -> Self {
+impl ::std::convert::From<&Self> for VulnerabilitiesItemUpgradePathItem {
+    fn from(value: &VulnerabilitiesItemUpgradePathItem) -> Self {
         value.clone()
     }
 }
-impl ::std::fmt::Display for SnykContainerVulnerabilitiesItemUpgradePathItem {
+impl ::std::fmt::Display for VulnerabilitiesItemUpgradePathItem {
     fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
         match self {
             Self::Boolean(x) => x.fmt(f),
@@ -8480,7 +6878,7 @@ impl ::std::fmt::Display for SnykContainerVulnerabilitiesItemUpgradePathItem {
         }
     }
 }
-impl ::std::convert::From<bool> for SnykContainerVulnerabilitiesItemUpgradePathItem {
+impl ::std::convert::From<bool> for VulnerabilitiesItemUpgradePathItem {
     fn from(value: bool) -> Self {
         Self::Boolean(value)
     }

@@ -1,19 +1,55 @@
-use clap::Parser;
+use clap::{Parser, Subcommand, ValueEnum};
+use snyk_to_md_core::markdown::MarkdownFormat;
 use snyk_to_md_core::parser::ParserType;
 use std::path::PathBuf;
 
+#[derive(Debug, Clone, Subcommand, ValueEnum)]
+pub(crate) enum CliParserType {
+    Container,
+    Code,
+}
+
+impl From<CliParserType> for ParserType {
+    fn from(cli_type: CliParserType) -> Self {
+        match cli_type {
+            CliParserType::Container => ParserType::Container,
+            CliParserType::Code => ParserType::Code,
+        }
+    }
+}
+
+#[derive(Debug, Clone, ValueEnum)]
+pub(crate) enum CliOutputFormat {
+    #[value(name = "github-flavored")]
+    GitHubFlavored,
+    #[value(name = "common-mark")]
+    CommonMark,
+}
+
+impl From<CliOutputFormat> for MarkdownFormat {
+    fn from(cli_format: CliOutputFormat) -> Self {
+        match cli_format {
+            CliOutputFormat::GitHubFlavored => MarkdownFormat::GitHubFlavored,
+            CliOutputFormat::CommonMark => MarkdownFormat::CommonMark,
+        }
+    }
+}
+
 #[derive(Parser)]
 #[command(name = "snyk-to-md")]
-#[command(about = "A tool to generate security reports from various snyk JSON files.", long_about = None
-)]
-#[command(version)]
-pub struct Cli {
-    #[arg(short, long)]
-    pub input: PathBuf,
-
-    #[arg(short, long, value_parser)]
-    pub parser_type: ParserType,
+#[command(about, version)]
+pub(crate) struct Cli {
+    #[command(subcommand)]
+    pub(crate) command: CliParserType,
+    
+    #[arg(short, long, value_parser, default_value = "CommonMark")]
+    pub(crate) format: CliOutputFormat,
 
     #[arg(short, long)]
-    pub output: Option<PathBuf>,
+    pub(crate) input: PathBuf,
+
+    #[arg(short, long)]
+    pub(crate) output: Option<PathBuf>,
+
+
 }

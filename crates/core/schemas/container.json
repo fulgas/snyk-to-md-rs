@@ -13,18 +13,7 @@
       "type": "boolean"
     },
     "ignoreSettings": {
-      "type": "object",
-      "properties": {
-        "adminOnly": {
-          "type": "boolean"
-        },
-        "disregardFilesystemIgnores": {
-          "type": "boolean"
-        },
-        "reasonRequired": {
-          "type": "boolean"
-        }
-      }
+      "$ref": "#/definitions/ignoreSettings"
     },
     "isPrivate": {
       "type": "boolean"
@@ -94,15 +83,7 @@
       "type": "string"
     },
     "filtered": {
-      "type": "object",
-      "properties": {
-        "patch": {
-          "type": "array"
-        },
-        "ignore": {
-          "type": "array"
-        }
-      }
+      "$ref": "#/definitions/filtered"
     },
     "targetFile": {
       "type": "string"
@@ -111,261 +92,7 @@
       "type": "number"
     },
     "vulnerabilities": {
-      "type": "array",
-      "items": {
-        "type": "object",
-        "properties": {
-          "cvssSources": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "severity": {
-                  "type": "string"
-                },
-                "modificationTime": {
-                  "type": "string"
-                },
-                "assigner": {
-                  "type": "string"
-                },
-                "cvssVersion": {
-                  "type": "string"
-                },
-                "vector": {
-                  "type": "string"
-                },
-                "baseScore": {
-                  "type": "number"
-                },
-                "type": {
-                  "type": "string"
-                }
-              }
-            }
-          },
-          "references": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "title": {
-                  "type": "string"
-                },
-                "url": {
-                  "type": "string"
-                }
-              }
-            }
-          },
-          "creationTime": {
-            "type": "string"
-          },
-          "description": {
-            "type": "string"
-          },
-          "language": {
-            "type": "string"
-          },
-          "fixedIn": {
-            "type": "array"
-          },
-          "title": {
-            "type": "string"
-          },
-          "isUpgradable": {
-            "type": "boolean"
-          },
-          "isDisputed": {
-            "type": "boolean"
-          },
-          "malicious": {
-            "type": "boolean"
-          },
-          "cvssScore": {
-            "type": "number"
-          },
-          "exploitDetails": {
-            "type": "object",
-            "properties": {
-              "sources": {
-                "type": "array"
-              },
-              "maturityLevels": {
-                "type": "array",
-                "items": {
-                  "type": "object",
-                  "properties": {
-                    "level": {
-                      "type": "string"
-                    },
-                    "format": {
-                      "type": "string"
-                    },
-                    "type": {
-                      "type": "string"
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "modificationTime": {
-            "type": "string"
-          },
-          "semver": {
-            "type": "object",
-            "properties": {
-              "vulnerable": {
-                "type": "array",
-                "items": {
-                  "type": "string"
-                }
-              }
-            }
-          },
-          "from": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-          "id": {
-            "type": "string"
-          },
-          "packageName": {
-            "type": "string"
-          },
-          "credit": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-          "severity": {
-            "type": "string"
-          },
-          "severityWithCritical": {
-            "type": "string"
-          },
-          "dockerBaseImage": {
-            "type": "string"
-          },
-          "insights": {
-            "type": "object",
-            "properties": {
-              "triageAdvice": {
-                "type": "null"
-              }
-            }
-          },
-          "epssDetails": {
-            "type": "object",
-            "properties": {
-              "percentile": {
-                "type": "string"
-              },
-              "probability": {
-                "type": "string"
-              },
-              "modelVersion": {
-                "type": "string"
-              }
-            }
-          },
-          "identifiers": {
-            "type": "object",
-            "properties": {
-              "CWE": {
-                "type": "array",
-                "items": {
-                  "type": "string"
-                }
-              },
-              "CVE": {
-                "type": "array",
-                "items": {
-                  "type": "string"
-                }
-              },
-              "ALTERNATIVE": {
-                "type": "array"
-              }
-            }
-          },
-          "relativeImportance": {
-            "type": "string"
-          },
-          "CVSSv3": {
-            "type": "string"
-          },
-          "patches": {
-            "type": "array"
-          },
-          "nvdSeverity": {
-            "type": "string"
-          },
-          "packageManager": {
-            "type": "string"
-          },
-          "severityBasedOn": {
-            "type": "string"
-          },
-          "upgradePath": {
-            "type": "array",
-            "items": {
-              "type": ["boolean", "string"]
-            }
-          },
-          "version": {
-            "type": "string"
-          },
-          "cvssDetails": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "severity": {
-                  "type": "string"
-                },
-                "cvssV3BaseScore": {
-                  "type": "number"
-                },
-                "modificationTime": {
-                  "type": "string"
-                },
-                "assigner": {
-                  "type": "string"
-                },
-                "cvssV3Vector": {
-                  "type": "string"
-                }
-              }
-            }
-          },
-          "isPatchable": {
-            "type": "boolean"
-          },
-          "cpes": {
-            "type": "array"
-          },
-          "socialTrendAlert": {
-            "type": "boolean"
-          },
-          "publicationTime": {
-            "type": "string"
-          },
-          "name": {
-            "type": "string"
-          },
-          "exploit": {
-            "type": "string"
-          },
-          "disclosureTime": {
-            "type": "string"
-          }
-        }
-      }
+      "$ref": "#/definitions/vulnerabilities"
     },
     "licensesPolicy": {
       "type": "object",
@@ -614,7 +341,7 @@
       "type": "string"
     },
     "uniqueCount": {
-      "type": "number"
+      "type": "integer"
     },
     "applications": {
       "type": "array",
@@ -631,18 +358,7 @@
             "type": "boolean"
           },
           "ignoreSettings": {
-            "type": "object",
-            "properties": {
-              "adminOnly": {
-                "type": "boolean"
-              },
-              "disregardFilesystemIgnores": {
-                "type": "boolean"
-              },
-              "reasonRequired": {
-                "type": "boolean"
-              }
-            }
+            "$ref": "#/definitions/ignoreSettings"
           },
           "isPrivate": {
             "type": "boolean"
@@ -807,15 +523,7 @@
             "type": "string"
           },
           "filtered": {
-            "type": "object",
-            "properties": {
-              "patch": {
-                "type": "array"
-              },
-              "ignore": {
-                "type": "array"
-              }
-            }
+            "$ref": "#/definitions/filtered"
           },
           "targetFile": {
             "type": "string"
@@ -824,275 +532,7 @@
             "type": "number"
           },
           "vulnerabilities": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "cvssSources": {
-                  "type": "array",
-                  "items": {
-                    "type": "object",
-                    "properties": {
-                      "severity": {
-                        "type": "string"
-                      },
-                      "modificationTime": {
-                        "type": "string"
-                      },
-                      "assigner": {
-                        "type": "string"
-                      },
-                      "cvssVersion": {
-                        "type": "string"
-                      },
-                      "vector": {
-                        "type": "string"
-                      },
-                      "baseScore": {
-                        "type": "number"
-                      },
-                      "type": {
-                        "type": "string"
-                      }
-                    }
-                  }
-                },
-                "functions": {
-                  "type": "array"
-                },
-                "references": {
-                  "type": "array",
-                  "items": {
-                    "type": "object",
-                    "properties": {
-                      "title": {
-                        "type": "string"
-                      },
-                      "url": {
-                        "type": "string"
-                      }
-                    }
-                  }
-                },
-                "creationTime": {
-                  "type": "string"
-                },
-                "functions_new": {
-                  "type": "array"
-                },
-                "moduleName": {
-                  "type": "string"
-                },
-                "description": {
-                  "type": "string"
-                },
-                "language": {
-                  "type": "string"
-                },
-                "fixedIn": {
-                  "type": "array",
-                  "items": {
-                    "type": "string"
-                  }
-                },
-                "title": {
-                  "type": "string"
-                },
-                "isUpgradable": {
-                  "type": "boolean"
-                },
-                "isDisputed": {
-                  "type": "boolean"
-                },
-                "malicious": {
-                  "type": "boolean"
-                },
-                "cvssScore": {
-                  "type": "number"
-                },
-                "proprietary": {
-                  "type": "boolean"
-                },
-                "exploitDetails": {
-                  "type": "object",
-                  "properties": {
-                    "sources": {
-                      "type": "array"
-                    },
-                    "maturityLevels": {
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "properties": {
-                          "level": {
-                            "type": "string"
-                          },
-                          "format": {
-                            "type": "string"
-                          },
-                          "type": {
-                            "type": "string"
-                          }
-                        }
-                      }
-                    }
-                  }
-                },
-                "modificationTime": {
-                  "type": "string"
-                },
-                "semver": {
-                  "type": "object",
-                  "properties": {
-                    "vulnerable": {
-                      "type": "array",
-                      "items": {
-                        "type": "string"
-                      }
-                    }
-                  }
-                },
-                "from": {
-                  "type": "array",
-                  "items": {
-                    "type": "string"
-                  }
-                },
-                "id": {
-                  "type": "string"
-                },
-                "packageName": {
-                  "type": "string"
-                },
-                "credit": {
-                  "type": "array",
-                  "items": {
-                    "type": "string"
-                  }
-                },
-                "severity": {
-                  "type": "string"
-                },
-                "severityWithCritical": {
-                  "type": "string"
-                },
-                "insights": {
-                  "type": "object",
-                  "properties": {
-                    "triageAdvice": {
-                      "type": "null"
-                    }
-                  }
-                },
-                "epssDetails": {
-                  "type": "object",
-                  "properties": {
-                    "percentile": {
-                      "type": "string"
-                    },
-                    "probability": {
-                      "type": "string"
-                    },
-                    "modelVersion": {
-                      "type": "string"
-                    }
-                  }
-                },
-                "mavenModuleName": {
-                  "type": "object",
-                  "properties": {
-                    "groupId": {
-                      "type": "string"
-                    },
-                    "artifactId": {
-                      "type": "string"
-                    }
-                  }
-                },
-                "identifiers": {
-                  "type": "object",
-                  "properties": {
-                    "CWE": {
-                      "type": "array",
-                      "items": {
-                        "type": "string"
-                      }
-                    },
-                    "CVE": {
-                      "type": "array",
-                      "items": {
-                        "type": "string"
-                      }
-                    }
-                  }
-                },
-                "CVSSv3": {
-                  "type": "string"
-                },
-                "patches": {
-                  "type": "array"
-                },
-                "packageManager": {
-                  "type": "string"
-                },
-                "severityBasedOn": {
-                  "type": "string"
-                },
-                "upgradePath": {
-                  "type": "array",
-                  "items": {
-                    "type": ["boolean", "string"]
-                  }
-                },
-                "version": {
-                  "type": "string"
-                },
-                "cvssDetails": {
-                  "type": "array",
-                  "items": {
-                    "type": "object",
-                    "properties": {
-                      "severity": {
-                        "type": "string"
-                      },
-                      "cvssV3BaseScore": {
-                        "type": "number"
-                      },
-                      "modificationTime": {
-                        "type": "string"
-                      },
-                      "assigner": {
-                        "type": "string"
-                      },
-                      "cvssV3Vector": {
-                        "type": "string"
-                      }
-                    }
-                  }
-                },
-                "alternativeIds": {
-                  "type": "array"
-                },
-                "isPatchable": {
-                  "type": "boolean"
-                },
-                "socialTrendAlert": {
-                  "type": "boolean"
-                },
-                "publicationTime": {
-                  "type": "string"
-                },
-                "name": {
-                  "type": "string"
-                },
-                "exploit": {
-                  "type": "string"
-                },
-                "disclosureTime": {
-                  "type": "string"
-                }
-              }
-            }
+            "$ref": "#/definitions/vulnerabilities"
           },
           "licensesPolicy": {
             "type": "object",
@@ -1341,15 +781,340 @@
             "type": "string"
           },
           "uniqueCount": {
-            "type": "number"
+            "type": "integer"
           }
-        }
+        },
+        "required": [
+          "org",
+          "projectName",
+          "uniqueCount",
+          "vulnerabilities",
+          "targetFile"
+        ]
       }
     }
   },
   "required": [
     "org",
     "projectName",
-    "uniqueCount"
-  ]
+    "uniqueCount",
+    "vulnerabilities",
+    "targetFile"
+  ],
+  "definitions" : {
+    "vulnerabilities": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "cvssSources": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "severity": {
+                  "type": "string"
+                },
+                "modificationTime": {
+                  "type": "string"
+                },
+                "assigner": {
+                  "type": "string"
+                },
+                "cvssVersion": {
+                  "type": "string"
+                },
+                "vector": {
+                  "type": "string"
+                },
+                "baseScore": {
+                  "type": "number"
+                },
+                "type": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "functions": {
+            "type": "array"
+          },
+          "references": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "title": {
+                  "type": "string"
+                },
+                "url": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "creationTime": {
+            "type": "string"
+          },
+          "functions_new": {
+            "type": "array"
+          },
+          "moduleName": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "language": {
+            "type": "string"
+          },
+          "fixedIn": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "title": {
+            "type": "string"
+          },
+          "isUpgradable": {
+            "type": "boolean"
+          },
+          "isDisputed": {
+            "type": "boolean"
+          },
+          "malicious": {
+            "type": "boolean"
+          },
+          "cvssScore": {
+            "type": "number"
+          },
+          "proprietary": {
+            "type": "boolean"
+          },
+          "exploitDetails": {
+            "type": "object",
+            "properties": {
+              "sources": {
+                "type": "array"
+              },
+              "maturityLevels": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "level": {
+                      "type": "string"
+                    },
+                    "format": {
+                      "type": "string"
+                    },
+                    "type": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "modificationTime": {
+            "type": "string"
+          },
+          "semver": {
+            "type": "object",
+            "properties": {
+              "vulnerable": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "from": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "id": {
+            "type": "string"
+          },
+          "packageName": {
+            "type": "string"
+          },
+          "credit": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "severity": {
+            "type": "string"
+          },
+          "severityWithCritical": {
+            "type": "string"
+          },
+          "dockerBaseImage": {
+            "type": "string"
+          },
+          "insights": {
+            "type": "object",
+            "properties": {
+              "triageAdvice": {
+                "type": "null"
+              }
+            }
+          },
+          "epssDetails": {
+            "type": "object",
+            "properties": {
+              "percentile": {
+                "type": "string"
+              },
+              "probability": {
+                "type": "string"
+              },
+              "modelVersion": {
+                "type": "string"
+              }
+            }
+          },
+          "mavenModuleName": {
+            "type": "object",
+            "properties": {
+              "groupId": {
+                "type": "string"
+              },
+              "artifactId": {
+                "type": "string"
+              }
+            }
+          },
+          "identifiers": {
+            "type": "object",
+            "properties": {
+              "CWE": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "CVE": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            },
+            "ALTERNATIVE": {
+              "type": "array"
+            }
+          },
+          "relativeImportance": {
+            "type": "string"
+          },
+          "CVSSv3": {
+            "type": "string"
+          },
+          "patches": {
+            "type": "array"
+          },
+          "nvdSeverity": {
+            "type": "string"
+          },
+          "packageManager": {
+            "type": "string"
+          },
+          "severityBasedOn": {
+            "type": "string"
+          },
+          "upgradePath": {
+            "type": "array",
+            "items": {
+              "type": [
+                "boolean",
+                "string"
+              ]
+            }
+          },
+          "version": {
+            "type": "string"
+          },
+          "cvssDetails": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "severity": {
+                  "type": "string"
+                },
+                "cvssV3BaseScore": {
+                  "type": "number"
+                },
+                "modificationTime": {
+                  "type": "string"
+                },
+                "assigner": {
+                  "type": "string"
+                },
+                "cvssV3Vector": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "alternativeIds": {
+            "type": "array"
+          },
+          "isPatchable": {
+            "type": "boolean"
+          },
+          "cpes": {
+            "type": "array"
+          },
+          "socialTrendAlert": {
+            "type": "boolean"
+          },
+          "publicationTime": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "exploit": {
+            "type": "string"
+          },
+          "disclosureTime": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "ignoreSettings": {
+      "type": "object",
+      "properties": {
+        "adminOnly": {
+          "type": "boolean"
+        },
+        "disregardFilesystemIgnores": {
+          "type": "boolean"
+        },
+        "reasonRequired": {
+          "type": "boolean"
+        }
+      }
+    },
+    "filtered": {
+      "type": "object",
+      "properties": {
+        "patch": {
+          "type": "array"
+        },
+        "ignore": {
+          "type": "array"
+        }
+      }
+    }
+  }
 }

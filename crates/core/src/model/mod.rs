@@ -1,1 +1,1 @@
-pub mod security_report;
+pub(crate) mod security_report;
