@@ -10,7 +10,7 @@ pub(crate) struct SnykContainerParser;
 
 impl Parser for SnykContainerParser {
     fn parse<'a>(&self, content: &str) -> Result<SecurityReport, ParserError> {
-        let snyk_container: SnykContainer = serde_json::from_str(&content)?;
+        let snyk_container: SnykContainer = serde_json::from_str(content)?;
         println!("✅ Successfully parsed JSON");
 
         let mut projects = Vec::new();

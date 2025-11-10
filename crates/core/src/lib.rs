@@ -49,6 +49,7 @@ impl ReportProcessor {
     }
 }
 
+#[derive(Default)]
 pub struct ReportProcessorBuilder {
     parser_type: Option<ParserType>,
     content: Option<String>,

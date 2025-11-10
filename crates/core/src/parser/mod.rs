@@ -2,7 +2,6 @@ use crate::model::security_report::SecurityReport;
 use crate::parser::code::SnykCodeParser;
 use crate::parser::container::container_parser::SnykContainerParser;
 use anyhow::Result;
-use std::str::FromStr;
 
 mod code;
 mod container;
@@ -13,21 +12,6 @@ pub enum ParserType {
     Code,
 }
 
-impl FromStr for ParserType {
-    type Err = String;
-
-    fn from_str(s: &str) -> Result<Self, Self::Err> {
-        match s.to_lowercase().as_str() {
-            "container" => Ok(ParserType::Container),
-            "code" => Ok(ParserType::Code),
-            _ => Err(format!(
-                "Invalid parser type: '{}'. Expected 'container' or 'code'",
-                s
-            )),
-        }
-    }
-}
-
 #[derive(Debug, thiserror::Error)]
 pub enum ParserError {
     #[error("Failed to parse Snyk report JSON")]
@@ -35,7 +19,7 @@ pub enum ParserError {
 }
 
 pub(crate) trait Parser {
-    fn parse<'a>(&self, content: &str) -> Result<SecurityReport, ParserError>;
+    fn parse(&self, content: &str) -> Result<SecurityReport, ParserError>;
 }
 
 pub(crate) struct ParserFactory;

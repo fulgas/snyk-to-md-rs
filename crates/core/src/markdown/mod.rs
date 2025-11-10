@@ -34,7 +34,7 @@ impl MarkdownGeneratorFactory {
         with_emoji: bool,
     ) -> Box<dyn MarkdownGenerator> {
         match format {
-            MarkdownFormat::CommonMark => CommonMarkGenerator::new(with_emoji),
+            MarkdownFormat::CommonMark => Box::new(CommonMarkGenerator::new(with_emoji)),
             MarkdownFormat::GitHubFlavored => Box::new(GitFlavouredMarkdownGenerator),
         }
     }

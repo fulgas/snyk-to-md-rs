@@ -90,8 +90,8 @@ pub(crate) struct CommonMarkGenerator {
 }
 
 impl CommonMarkGenerator {
-    pub(crate) fn new(with_emoji: bool) -> Box<dyn MarkdownGenerator> {
-        Box::new(Self { with_emoji })
+    pub(crate) fn new(with_emoji: bool) -> CommonMarkGenerator {
+        Self { with_emoji }
     }
 }
 
@@ -107,7 +107,7 @@ impl MarkdownGenerator for CommonMarkGenerator {
             .map(|project| ReportProject {
                 name: project.name.clone(),
                 organization: project.organization.clone(),
-                project_type: project.project_type.clone().into(),
+                project_type: project.project_type.into(),
                 target_file: project.target_file.clone(),
                 summary: ReportSummary {
                     critical: project.summary.critical,
@@ -145,7 +145,7 @@ fn map_vulnerabilities(
                 severity: v.severity.clone().into(),
                 package_name: v.package_name.clone(),
                 version: v.version.clone(),
-                cvss_score: v.cvss_score.clone(),
+                cvss_score: v.cvss_score,
                 is_upgradable: v.is_upgradable,
                 is_patchable: v.is_patchable,
                 cve_ids: v.cve_ids.clone(),
