@@ -4,18 +4,12 @@ pub mod error {
     pub struct ConversionError(::std::borrow::Cow<'static, str>);
     impl ::std::error::Error for ConversionError {}
     impl ::std::fmt::Display for ConversionError {
-        fn fmt(
-            &self,
-            f: &mut ::std::fmt::Formatter<'_>,
-        ) -> Result<(), ::std::fmt::Error> {
+        fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> Result<(), ::std::fmt::Error> {
             ::std::fmt::Display::fmt(&self.0, f)
         }
     }
     impl ::std::fmt::Debug for ConversionError {
-        fn fmt(
-            &self,
-            f: &mut ::std::fmt::Formatter<'_>,
-        ) -> Result<(), ::std::fmt::Error> {
+        fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> Result<(), ::std::fmt::Error> {
             ::std::fmt::Debug::fmt(&self.0, f)
         }
     }
@@ -1522,9 +1516,7 @@ pub struct SnykContainerApplicationsItem {
         default,
         skip_serializing_if = "::std::option::Option::is_none"
     )]
-    pub licenses_policy: ::std::option::Option<
-        SnykContainerApplicationsItemLicensesPolicy,
-    >,
+    pub licenses_policy: ::std::option::Option<SnykContainerApplicationsItemLicensesPolicy>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub ok: ::std::option::Option<bool>,
     pub org: ::std::string::String,
@@ -1550,8 +1542,7 @@ pub struct SnykContainerApplicationsItem {
     pub unique_count: i64,
     pub vulnerabilities: Vulnerabilities,
 }
-impl ::std::convert::From<&SnykContainerApplicationsItem>
-for SnykContainerApplicationsItem {
+impl ::std::convert::From<&SnykContainerApplicationsItem> for SnykContainerApplicationsItem {
     fn from(value: &SnykContainerApplicationsItem) -> Self {
         value.clone()
     }
@@ -1807,14 +1798,14 @@ pub struct SnykContainerApplicationsItemLicensesPolicy {
         default,
         skip_serializing_if = "::std::option::Option::is_none"
     )]
-    pub org_license_rules: ::std::option::Option<
-        SnykContainerApplicationsItemLicensesPolicyOrgLicenseRules,
-    >,
+    pub org_license_rules:
+        ::std::option::Option<SnykContainerApplicationsItemLicensesPolicyOrgLicenseRules>,
     #[serde(default, skip_serializing_if = "::serde_json::Map::is_empty")]
     pub severities: ::serde_json::Map<::std::string::String, ::serde_json::Value>,
 }
 impl ::std::convert::From<&SnykContainerApplicationsItemLicensesPolicy>
-for SnykContainerApplicationsItemLicensesPolicy {
+    for SnykContainerApplicationsItemLicensesPolicy
+{
     fn from(value: &SnykContainerApplicationsItemLicensesPolicy) -> Self {
         value.clone()
     }
@@ -2070,138 +2061,122 @@ pub struct SnykContainerApplicationsItemLicensesPolicyOrgLicenseRules {
         default,
         skip_serializing_if = "::std::option::Option::is_none"
     )]
-    pub agpl_1_0: ::std::option::Option<
-        SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesAgpl10,
-    >,
+    pub agpl_1_0:
+        ::std::option::Option<SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesAgpl10>,
     #[serde(
         rename = "AGPL-3.0",
         default,
         skip_serializing_if = "::std::option::Option::is_none"
     )]
-    pub agpl_3_0: ::std::option::Option<
-        SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesAgpl30,
-    >,
+    pub agpl_3_0:
+        ::std::option::Option<SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesAgpl30>,
     #[serde(
         rename = "Artistic-1.0",
         default,
         skip_serializing_if = "::std::option::Option::is_none"
     )]
-    pub artistic_1_0: ::std::option::Option<
-        SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesArtistic10,
-    >,
+    pub artistic_1_0:
+        ::std::option::Option<SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesArtistic10>,
     #[serde(
         rename = "Artistic-2.0",
         default,
         skip_serializing_if = "::std::option::Option::is_none"
     )]
-    pub artistic_2_0: ::std::option::Option<
-        SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesArtistic20,
-    >,
+    pub artistic_2_0:
+        ::std::option::Option<SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesArtistic20>,
     #[serde(
         rename = "CDDL-1.0",
         default,
         skip_serializing_if = "::std::option::Option::is_none"
     )]
-    pub cddl_1_0: ::std::option::Option<
-        SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesCddl10,
-    >,
+    pub cddl_1_0:
+        ::std::option::Option<SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesCddl10>,
     #[serde(
         rename = "CPOL-1.02",
         default,
         skip_serializing_if = "::std::option::Option::is_none"
     )]
-    pub cpol_1_02: ::std::option::Option<
-        SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesCpol102,
-    >,
+    pub cpol_1_02:
+        ::std::option::Option<SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesCpol102>,
     #[serde(
         rename = "EPL-1.0",
         default,
         skip_serializing_if = "::std::option::Option::is_none"
     )]
-    pub epl_1_0: ::std::option::Option<
-        SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesEpl10,
-    >,
+    pub epl_1_0:
+        ::std::option::Option<SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesEpl10>,
     #[serde(
         rename = "GPL-2.0",
         default,
         skip_serializing_if = "::std::option::Option::is_none"
     )]
-    pub gpl_2_0: ::std::option::Option<
-        SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesGpl20,
-    >,
+    pub gpl_2_0:
+        ::std::option::Option<SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesGpl20>,
     #[serde(
         rename = "GPL-3.0",
         default,
         skip_serializing_if = "::std::option::Option::is_none"
     )]
-    pub gpl_3_0: ::std::option::Option<
-        SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesGpl30,
-    >,
+    pub gpl_3_0:
+        ::std::option::Option<SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesGpl30>,
     #[serde(
         rename = "LGPL-2.0",
         default,
         skip_serializing_if = "::std::option::Option::is_none"
     )]
-    pub lgpl_2_0: ::std::option::Option<
-        SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesLgpl20,
-    >,
+    pub lgpl_2_0:
+        ::std::option::Option<SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesLgpl20>,
     #[serde(
         rename = "LGPL-2.1",
         default,
         skip_serializing_if = "::std::option::Option::is_none"
     )]
-    pub lgpl_2_1: ::std::option::Option<
-        SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesLgpl21,
-    >,
+    pub lgpl_2_1:
+        ::std::option::Option<SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesLgpl21>,
     #[serde(
         rename = "LGPL-3.0",
         default,
         skip_serializing_if = "::std::option::Option::is_none"
     )]
-    pub lgpl_3_0: ::std::option::Option<
-        SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesLgpl30,
-    >,
+    pub lgpl_3_0:
+        ::std::option::Option<SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesLgpl30>,
     #[serde(
         rename = "MPL-1.1",
         default,
         skip_serializing_if = "::std::option::Option::is_none"
     )]
-    pub mpl_1_1: ::std::option::Option<
-        SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesMpl11,
-    >,
+    pub mpl_1_1:
+        ::std::option::Option<SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesMpl11>,
     #[serde(
         rename = "MPL-2.0",
         default,
         skip_serializing_if = "::std::option::Option::is_none"
     )]
-    pub mpl_2_0: ::std::option::Option<
-        SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesMpl20,
-    >,
+    pub mpl_2_0:
+        ::std::option::Option<SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesMpl20>,
     #[serde(
         rename = "MS-RL",
         default,
         skip_serializing_if = "::std::option::Option::is_none"
     )]
-    pub ms_rl: ::std::option::Option<
-        SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesMsRl,
-    >,
+    pub ms_rl:
+        ::std::option::Option<SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesMsRl>,
     #[serde(
         rename = "SimPL-2.0",
         default,
         skip_serializing_if = "::std::option::Option::is_none"
     )]
-    pub sim_pl_2_0: ::std::option::Option<
-        SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesSimPl20,
-    >,
+    pub sim_pl_2_0:
+        ::std::option::Option<SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesSimPl20>,
 }
 impl ::std::convert::From<&SnykContainerApplicationsItemLicensesPolicyOrgLicenseRules>
-for SnykContainerApplicationsItemLicensesPolicyOrgLicenseRules {
+    for SnykContainerApplicationsItemLicensesPolicyOrgLicenseRules
+{
     fn from(value: &SnykContainerApplicationsItemLicensesPolicyOrgLicenseRules) -> Self {
         value.clone()
     }
 }
-impl ::std::default::Default
-for SnykContainerApplicationsItemLicensesPolicyOrgLicenseRules {
+impl ::std::default::Default for SnykContainerApplicationsItemLicensesPolicyOrgLicenseRules {
     fn default() -> Self {
         Self {
             agpl_1_0: Default::default(),
@@ -2257,17 +2232,14 @@ pub struct SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesAgpl10 {
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub severity: ::std::option::Option<::std::string::String>,
 }
-impl ::std::convert::From<
-    &SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesAgpl10,
-> for SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesAgpl10 {
-    fn from(
-        value: &SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesAgpl10,
-    ) -> Self {
+impl ::std::convert::From<&SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesAgpl10>
+    for SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesAgpl10
+{
+    fn from(value: &SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesAgpl10) -> Self {
         value.clone()
     }
 }
-impl ::std::default::Default
-for SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesAgpl10 {
+impl ::std::default::Default for SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesAgpl10 {
     fn default() -> Self {
         Self {
             instructions: Default::default(),
@@ -2310,17 +2282,14 @@ pub struct SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesAgpl30 {
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub severity: ::std::option::Option<::std::string::String>,
 }
-impl ::std::convert::From<
-    &SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesAgpl30,
-> for SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesAgpl30 {
-    fn from(
-        value: &SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesAgpl30,
-    ) -> Self {
+impl ::std::convert::From<&SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesAgpl30>
+    for SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesAgpl30
+{
+    fn from(value: &SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesAgpl30) -> Self {
         value.clone()
     }
 }
-impl ::std::default::Default
-for SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesAgpl30 {
+impl ::std::default::Default for SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesAgpl30 {
     fn default() -> Self {
         Self {
             instructions: Default::default(),
@@ -2363,17 +2332,16 @@ pub struct SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesArtistic10 
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub severity: ::std::option::Option<::std::string::String>,
 }
-impl ::std::convert::From<
-    &SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesArtistic10,
-> for SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesArtistic10 {
-    fn from(
-        value: &SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesArtistic10,
-    ) -> Self {
+impl ::std::convert::From<&SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesArtistic10>
+    for SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesArtistic10
+{
+    fn from(value: &SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesArtistic10) -> Self {
         value.clone()
     }
 }
 impl ::std::default::Default
-for SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesArtistic10 {
+    for SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesArtistic10
+{
     fn default() -> Self {
         Self {
             instructions: Default::default(),
@@ -2416,17 +2384,16 @@ pub struct SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesArtistic20 
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub severity: ::std::option::Option<::std::string::String>,
 }
-impl ::std::convert::From<
-    &SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesArtistic20,
-> for SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesArtistic20 {
-    fn from(
-        value: &SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesArtistic20,
-    ) -> Self {
+impl ::std::convert::From<&SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesArtistic20>
+    for SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesArtistic20
+{
+    fn from(value: &SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesArtistic20) -> Self {
         value.clone()
     }
 }
 impl ::std::default::Default
-for SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesArtistic20 {
+    for SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesArtistic20
+{
     fn default() -> Self {
         Self {
             instructions: Default::default(),
@@ -2469,17 +2436,14 @@ pub struct SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesCddl10 {
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub severity: ::std::option::Option<::std::string::String>,
 }
-impl ::std::convert::From<
-    &SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesCddl10,
-> for SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesCddl10 {
-    fn from(
-        value: &SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesCddl10,
-    ) -> Self {
+impl ::std::convert::From<&SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesCddl10>
+    for SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesCddl10
+{
+    fn from(value: &SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesCddl10) -> Self {
         value.clone()
     }
 }
-impl ::std::default::Default
-for SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesCddl10 {
+impl ::std::default::Default for SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesCddl10 {
     fn default() -> Self {
         Self {
             instructions: Default::default(),
@@ -2522,17 +2486,14 @@ pub struct SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesCpol102 {
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub severity: ::std::option::Option<::std::string::String>,
 }
-impl ::std::convert::From<
-    &SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesCpol102,
-> for SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesCpol102 {
-    fn from(
-        value: &SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesCpol102,
-    ) -> Self {
+impl ::std::convert::From<&SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesCpol102>
+    for SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesCpol102
+{
+    fn from(value: &SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesCpol102) -> Self {
         value.clone()
     }
 }
-impl ::std::default::Default
-for SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesCpol102 {
+impl ::std::default::Default for SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesCpol102 {
     fn default() -> Self {
         Self {
             instructions: Default::default(),
@@ -2575,17 +2536,14 @@ pub struct SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesEpl10 {
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub severity: ::std::option::Option<::std::string::String>,
 }
-impl ::std::convert::From<
-    &SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesEpl10,
-> for SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesEpl10 {
-    fn from(
-        value: &SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesEpl10,
-    ) -> Self {
+impl ::std::convert::From<&SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesEpl10>
+    for SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesEpl10
+{
+    fn from(value: &SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesEpl10) -> Self {
         value.clone()
     }
 }
-impl ::std::default::Default
-for SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesEpl10 {
+impl ::std::default::Default for SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesEpl10 {
     fn default() -> Self {
         Self {
             instructions: Default::default(),
@@ -2628,17 +2586,14 @@ pub struct SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesGpl20 {
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub severity: ::std::option::Option<::std::string::String>,
 }
-impl ::std::convert::From<
-    &SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesGpl20,
-> for SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesGpl20 {
-    fn from(
-        value: &SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesGpl20,
-    ) -> Self {
+impl ::std::convert::From<&SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesGpl20>
+    for SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesGpl20
+{
+    fn from(value: &SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesGpl20) -> Self {
         value.clone()
     }
 }
-impl ::std::default::Default
-for SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesGpl20 {
+impl ::std::default::Default for SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesGpl20 {
     fn default() -> Self {
         Self {
             instructions: Default::default(),
@@ -2681,17 +2636,14 @@ pub struct SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesGpl30 {
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub severity: ::std::option::Option<::std::string::String>,
 }
-impl ::std::convert::From<
-    &SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesGpl30,
-> for SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesGpl30 {
-    fn from(
-        value: &SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesGpl30,
-    ) -> Self {
+impl ::std::convert::From<&SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesGpl30>
+    for SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesGpl30
+{
+    fn from(value: &SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesGpl30) -> Self {
         value.clone()
     }
 }
-impl ::std::default::Default
-for SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesGpl30 {
+impl ::std::default::Default for SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesGpl30 {
     fn default() -> Self {
         Self {
             instructions: Default::default(),
@@ -2734,17 +2686,14 @@ pub struct SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesLgpl20 {
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub severity: ::std::option::Option<::std::string::String>,
 }
-impl ::std::convert::From<
-    &SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesLgpl20,
-> for SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesLgpl20 {
-    fn from(
-        value: &SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesLgpl20,
-    ) -> Self {
+impl ::std::convert::From<&SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesLgpl20>
+    for SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesLgpl20
+{
+    fn from(value: &SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesLgpl20) -> Self {
         value.clone()
     }
 }
-impl ::std::default::Default
-for SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesLgpl20 {
+impl ::std::default::Default for SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesLgpl20 {
     fn default() -> Self {
         Self {
             instructions: Default::default(),
@@ -2787,17 +2736,14 @@ pub struct SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesLgpl21 {
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub severity: ::std::option::Option<::std::string::String>,
 }
-impl ::std::convert::From<
-    &SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesLgpl21,
-> for SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesLgpl21 {
-    fn from(
-        value: &SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesLgpl21,
-    ) -> Self {
+impl ::std::convert::From<&SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesLgpl21>
+    for SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesLgpl21
+{
+    fn from(value: &SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesLgpl21) -> Self {
         value.clone()
     }
 }
-impl ::std::default::Default
-for SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesLgpl21 {
+impl ::std::default::Default for SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesLgpl21 {
     fn default() -> Self {
         Self {
             instructions: Default::default(),
@@ -2840,17 +2786,14 @@ pub struct SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesLgpl30 {
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub severity: ::std::option::Option<::std::string::String>,
 }
-impl ::std::convert::From<
-    &SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesLgpl30,
-> for SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesLgpl30 {
-    fn from(
-        value: &SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesLgpl30,
-    ) -> Self {
+impl ::std::convert::From<&SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesLgpl30>
+    for SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesLgpl30
+{
+    fn from(value: &SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesLgpl30) -> Self {
         value.clone()
     }
 }
-impl ::std::default::Default
-for SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesLgpl30 {
+impl ::std::default::Default for SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesLgpl30 {
     fn default() -> Self {
         Self {
             instructions: Default::default(),
@@ -2893,17 +2836,14 @@ pub struct SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesMpl11 {
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub severity: ::std::option::Option<::std::string::String>,
 }
-impl ::std::convert::From<
-    &SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesMpl11,
-> for SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesMpl11 {
-    fn from(
-        value: &SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesMpl11,
-    ) -> Self {
+impl ::std::convert::From<&SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesMpl11>
+    for SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesMpl11
+{
+    fn from(value: &SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesMpl11) -> Self {
         value.clone()
     }
 }
-impl ::std::default::Default
-for SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesMpl11 {
+impl ::std::default::Default for SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesMpl11 {
     fn default() -> Self {
         Self {
             instructions: Default::default(),
@@ -2946,17 +2886,14 @@ pub struct SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesMpl20 {
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub severity: ::std::option::Option<::std::string::String>,
 }
-impl ::std::convert::From<
-    &SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesMpl20,
-> for SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesMpl20 {
-    fn from(
-        value: &SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesMpl20,
-    ) -> Self {
+impl ::std::convert::From<&SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesMpl20>
+    for SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesMpl20
+{
+    fn from(value: &SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesMpl20) -> Self {
         value.clone()
     }
 }
-impl ::std::default::Default
-for SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesMpl20 {
+impl ::std::default::Default for SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesMpl20 {
     fn default() -> Self {
         Self {
             instructions: Default::default(),
@@ -2999,17 +2936,14 @@ pub struct SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesMsRl {
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub severity: ::std::option::Option<::std::string::String>,
 }
-impl ::std::convert::From<
-    &SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesMsRl,
-> for SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesMsRl {
-    fn from(
-        value: &SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesMsRl,
-    ) -> Self {
+impl ::std::convert::From<&SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesMsRl>
+    for SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesMsRl
+{
+    fn from(value: &SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesMsRl) -> Self {
         value.clone()
     }
 }
-impl ::std::default::Default
-for SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesMsRl {
+impl ::std::default::Default for SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesMsRl {
     fn default() -> Self {
         Self {
             instructions: Default::default(),
@@ -3052,17 +2986,14 @@ pub struct SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesSimPl20 {
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub severity: ::std::option::Option<::std::string::String>,
 }
-impl ::std::convert::From<
-    &SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesSimPl20,
-> for SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesSimPl20 {
-    fn from(
-        value: &SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesSimPl20,
-    ) -> Self {
+impl ::std::convert::From<&SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesSimPl20>
+    for SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesSimPl20
+{
+    fn from(value: &SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesSimPl20) -> Self {
         value.clone()
     }
 }
-impl ::std::default::Default
-for SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesSimPl20 {
+impl ::std::default::Default for SnykContainerApplicationsItemLicensesPolicyOrgLicenseRulesSimPl20 {
     fn default() -> Self {
         Self {
             instructions: Default::default(),
@@ -3234,14 +3165,13 @@ pub struct SnykContainerApplicationsItemRemediation {
     #[serde(default, skip_serializing_if = "::serde_json::Map::is_empty")]
     pub pin: ::serde_json::Map<::std::string::String, ::serde_json::Value>,
     #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
-    pub unresolved: ::std::vec::Vec<
-        SnykContainerApplicationsItemRemediationUnresolvedItem,
-    >,
+    pub unresolved: ::std::vec::Vec<SnykContainerApplicationsItemRemediationUnresolvedItem>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub upgrade: ::std::option::Option<SnykContainerApplicationsItemRemediationUpgrade>,
 }
 impl ::std::convert::From<&SnykContainerApplicationsItemRemediation>
-for SnykContainerApplicationsItemRemediation {
+    for SnykContainerApplicationsItemRemediation
+{
     fn from(value: &SnykContainerApplicationsItemRemediation) -> Self {
         value.clone()
     }
@@ -3412,9 +3342,7 @@ pub struct SnykContainerApplicationsItemRemediationUnresolvedItem {
     )]
     pub publication_time: ::std::option::Option<::std::string::String>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
-    pub semver: ::std::option::Option<
-        SnykContainerApplicationsItemRemediationUnresolvedItemSemver,
-    >,
+    pub semver: ::std::option::Option<SnykContainerApplicationsItemRemediationUnresolvedItemSemver>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub severity: ::std::option::Option<::std::string::String>,
     #[serde(
@@ -3436,14 +3364,14 @@ pub struct SnykContainerApplicationsItemRemediationUnresolvedItem {
         default,
         skip_serializing_if = "::std::vec::Vec::is_empty"
     )]
-    pub upgrade_path: ::std::vec::Vec<
-        SnykContainerApplicationsItemRemediationUnresolvedItemUpgradePathItem,
-    >,
+    pub upgrade_path:
+        ::std::vec::Vec<SnykContainerApplicationsItemRemediationUnresolvedItemUpgradePathItem>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub version: ::std::option::Option<::std::string::String>,
 }
 impl ::std::convert::From<&SnykContainerApplicationsItemRemediationUnresolvedItem>
-for SnykContainerApplicationsItemRemediationUnresolvedItem {
+    for SnykContainerApplicationsItemRemediationUnresolvedItem
+{
     fn from(value: &SnykContainerApplicationsItemRemediationUnresolvedItem) -> Self {
         value.clone()
     }
@@ -3499,15 +3427,13 @@ pub struct SnykContainerApplicationsItemRemediationUnresolvedItemSemver {
     pub vulnerable: ::std::vec::Vec<::std::string::String>,
 }
 impl ::std::convert::From<&SnykContainerApplicationsItemRemediationUnresolvedItemSemver>
-for SnykContainerApplicationsItemRemediationUnresolvedItemSemver {
-    fn from(
-        value: &SnykContainerApplicationsItemRemediationUnresolvedItemSemver,
-    ) -> Self {
+    for SnykContainerApplicationsItemRemediationUnresolvedItemSemver
+{
+    fn from(value: &SnykContainerApplicationsItemRemediationUnresolvedItemSemver) -> Self {
         value.clone()
     }
 }
-impl ::std::default::Default
-for SnykContainerApplicationsItemRemediationUnresolvedItemSemver {
+impl ::std::default::Default for SnykContainerApplicationsItemRemediationUnresolvedItemSemver {
     fn default() -> Self {
         Self {
             vulnerable: Default::default(),
@@ -3534,15 +3460,13 @@ pub enum SnykContainerApplicationsItemRemediationUnresolvedItemUpgradePathItem {
     String(::std::string::String),
 }
 impl ::std::convert::From<&Self>
-for SnykContainerApplicationsItemRemediationUnresolvedItemUpgradePathItem {
-    fn from(
-        value: &SnykContainerApplicationsItemRemediationUnresolvedItemUpgradePathItem,
-    ) -> Self {
+    for SnykContainerApplicationsItemRemediationUnresolvedItemUpgradePathItem
+{
+    fn from(value: &SnykContainerApplicationsItemRemediationUnresolvedItemUpgradePathItem) -> Self {
         value.clone()
     }
 }
-impl ::std::fmt::Display
-for SnykContainerApplicationsItemRemediationUnresolvedItemUpgradePathItem {
+impl ::std::fmt::Display for SnykContainerApplicationsItemRemediationUnresolvedItemUpgradePathItem {
     fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
         match self {
             Self::Boolean(x) => x.fmt(f),
@@ -3551,7 +3475,8 @@ for SnykContainerApplicationsItemRemediationUnresolvedItemUpgradePathItem {
     }
 }
 impl ::std::convert::From<bool>
-for SnykContainerApplicationsItemRemediationUnresolvedItemUpgradePathItem {
+    for SnykContainerApplicationsItemRemediationUnresolvedItemUpgradePathItem
+{
     fn from(value: bool) -> Self {
         Self::Boolean(value)
     }
@@ -3628,7 +3553,8 @@ pub struct SnykContainerApplicationsItemRemediationUpgrade {
     >,
 }
 impl ::std::convert::From<&SnykContainerApplicationsItemRemediationUpgrade>
-for SnykContainerApplicationsItemRemediationUpgrade {
+    for SnykContainerApplicationsItemRemediationUpgrade
+{
     fn from(value: &SnykContainerApplicationsItemRemediationUpgrade) -> Self {
         value.clone()
     }
@@ -3681,9 +3607,11 @@ pub struct SnykContainerApplicationsItemRemediationUpgradeChQosLogbackLogbackCor
     #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
     pub vulns: ::std::vec::Vec<::std::string::String>,
 }
-impl ::std::convert::From<
-    &SnykContainerApplicationsItemRemediationUpgradeChQosLogbackLogbackCore1513,
-> for SnykContainerApplicationsItemRemediationUpgradeChQosLogbackLogbackCore1513 {
+impl
+    ::std::convert::From<
+        &SnykContainerApplicationsItemRemediationUpgradeChQosLogbackLogbackCore1513,
+    > for SnykContainerApplicationsItemRemediationUpgradeChQosLogbackLogbackCore1513
+{
     fn from(
         value: &SnykContainerApplicationsItemRemediationUpgradeChQosLogbackLogbackCore1513,
     ) -> Self {
@@ -3691,7 +3619,8 @@ impl ::std::convert::From<
     }
 }
 impl ::std::default::Default
-for SnykContainerApplicationsItemRemediationUpgradeChQosLogbackLogbackCore1513 {
+    for SnykContainerApplicationsItemRemediationUpgradeChQosLogbackLogbackCore1513
+{
     fn default() -> Self {
         Self {
             upgrade_to: Default::default(),
@@ -3740,10 +3669,11 @@ pub struct SnykContainerApplicationsItemRemediationUpgradeOrgApacheTomcatEmbedTo
     #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
     pub vulns: ::std::vec::Vec<::std::string::String>,
 }
-impl ::std::convert::From<
-    &SnykContainerApplicationsItemRemediationUpgradeOrgApacheTomcatEmbedTomcatEmbedCore10146,
->
-for SnykContainerApplicationsItemRemediationUpgradeOrgApacheTomcatEmbedTomcatEmbedCore10146 {
+impl
+    ::std::convert::From<
+        &SnykContainerApplicationsItemRemediationUpgradeOrgApacheTomcatEmbedTomcatEmbedCore10146,
+    > for SnykContainerApplicationsItemRemediationUpgradeOrgApacheTomcatEmbedTomcatEmbedCore10146
+{
     fn from(
         value: &SnykContainerApplicationsItemRemediationUpgradeOrgApacheTomcatEmbedTomcatEmbedCore10146,
     ) -> Self {
@@ -3751,7 +3681,8 @@ for SnykContainerApplicationsItemRemediationUpgradeOrgApacheTomcatEmbedTomcatEmb
     }
 }
 impl ::std::default::Default
-for SnykContainerApplicationsItemRemediationUpgradeOrgApacheTomcatEmbedTomcatEmbedCore10146 {
+    for SnykContainerApplicationsItemRemediationUpgradeOrgApacheTomcatEmbedTomcatEmbedCore10146
+{
     fn default() -> Self {
         Self {
             upgrade_to: Default::default(),
@@ -3829,9 +3760,7 @@ pub struct SnykContainerDocker {
         default,
         skip_serializing_if = "::std::option::Option::is_none"
     )]
-    pub base_image_remediation: ::std::option::Option<
-        SnykContainerDockerBaseImageRemediation,
-    >,
+    pub base_image_remediation: ::std::option::Option<SnykContainerDockerBaseImageRemediation>,
     #[serde(
         rename = "binariesVulns",
         default,
@@ -3893,7 +3822,8 @@ pub struct SnykContainerDockerBaseImageRemediation {
     pub code: ::std::option::Option<::std::string::String>,
 }
 impl ::std::convert::From<&SnykContainerDockerBaseImageRemediation>
-for SnykContainerDockerBaseImageRemediation {
+    for SnykContainerDockerBaseImageRemediation
+{
     fn from(value: &SnykContainerDockerBaseImageRemediation) -> Self {
         value.clone()
     }
@@ -3932,7 +3862,8 @@ pub struct SnykContainerDockerBaseImageRemediationAdviceItem {
     pub message: ::std::option::Option<::std::string::String>,
 }
 impl ::std::convert::From<&SnykContainerDockerBaseImageRemediationAdviceItem>
-for SnykContainerDockerBaseImageRemediationAdviceItem {
+    for SnykContainerDockerBaseImageRemediationAdviceItem
+{
     fn from(value: &SnykContainerDockerBaseImageRemediationAdviceItem) -> Self {
         value.clone()
     }
@@ -3978,8 +3909,7 @@ pub struct SnykContainerDockerBinariesVulns {
     )]
     pub issues_data: ::serde_json::Map<::std::string::String, ::serde_json::Value>,
 }
-impl ::std::convert::From<&SnykContainerDockerBinariesVulns>
-for SnykContainerDockerBinariesVulns {
+impl ::std::convert::From<&SnykContainerDockerBinariesVulns> for SnykContainerDockerBinariesVulns {
     fn from(value: &SnykContainerDockerBinariesVulns) -> Self {
         value.clone()
     }
@@ -4279,9 +4209,7 @@ pub struct SnykContainerLicensesPolicy {
         default,
         skip_serializing_if = "::std::option::Option::is_none"
     )]
-    pub org_license_rules: ::std::option::Option<
-        SnykContainerLicensesPolicyOrgLicenseRules,
-    >,
+    pub org_license_rules: ::std::option::Option<SnykContainerLicensesPolicyOrgLicenseRules>,
     #[serde(default, skip_serializing_if = "::serde_json::Map::is_empty")]
     pub severities: ::serde_json::Map<::std::string::String, ::serde_json::Value>,
 }
@@ -4541,49 +4469,37 @@ pub struct SnykContainerLicensesPolicyOrgLicenseRules {
         default,
         skip_serializing_if = "::std::option::Option::is_none"
     )]
-    pub agpl_1_0: ::std::option::Option<
-        SnykContainerLicensesPolicyOrgLicenseRulesAgpl10,
-    >,
+    pub agpl_1_0: ::std::option::Option<SnykContainerLicensesPolicyOrgLicenseRulesAgpl10>,
     #[serde(
         rename = "AGPL-3.0",
         default,
         skip_serializing_if = "::std::option::Option::is_none"
     )]
-    pub agpl_3_0: ::std::option::Option<
-        SnykContainerLicensesPolicyOrgLicenseRulesAgpl30,
-    >,
+    pub agpl_3_0: ::std::option::Option<SnykContainerLicensesPolicyOrgLicenseRulesAgpl30>,
     #[serde(
         rename = "Artistic-1.0",
         default,
         skip_serializing_if = "::std::option::Option::is_none"
     )]
-    pub artistic_1_0: ::std::option::Option<
-        SnykContainerLicensesPolicyOrgLicenseRulesArtistic10,
-    >,
+    pub artistic_1_0: ::std::option::Option<SnykContainerLicensesPolicyOrgLicenseRulesArtistic10>,
     #[serde(
         rename = "Artistic-2.0",
         default,
         skip_serializing_if = "::std::option::Option::is_none"
     )]
-    pub artistic_2_0: ::std::option::Option<
-        SnykContainerLicensesPolicyOrgLicenseRulesArtistic20,
-    >,
+    pub artistic_2_0: ::std::option::Option<SnykContainerLicensesPolicyOrgLicenseRulesArtistic20>,
     #[serde(
         rename = "CDDL-1.0",
         default,
         skip_serializing_if = "::std::option::Option::is_none"
     )]
-    pub cddl_1_0: ::std::option::Option<
-        SnykContainerLicensesPolicyOrgLicenseRulesCddl10,
-    >,
+    pub cddl_1_0: ::std::option::Option<SnykContainerLicensesPolicyOrgLicenseRulesCddl10>,
     #[serde(
         rename = "CPOL-1.02",
         default,
         skip_serializing_if = "::std::option::Option::is_none"
     )]
-    pub cpol_1_02: ::std::option::Option<
-        SnykContainerLicensesPolicyOrgLicenseRulesCpol102,
-    >,
+    pub cpol_1_02: ::std::option::Option<SnykContainerLicensesPolicyOrgLicenseRulesCpol102>,
     #[serde(
         rename = "EPL-1.0",
         default,
@@ -4607,25 +4523,19 @@ pub struct SnykContainerLicensesPolicyOrgLicenseRules {
         default,
         skip_serializing_if = "::std::option::Option::is_none"
     )]
-    pub lgpl_2_0: ::std::option::Option<
-        SnykContainerLicensesPolicyOrgLicenseRulesLgpl20,
-    >,
+    pub lgpl_2_0: ::std::option::Option<SnykContainerLicensesPolicyOrgLicenseRulesLgpl20>,
     #[serde(
         rename = "LGPL-2.1",
         default,
         skip_serializing_if = "::std::option::Option::is_none"
     )]
-    pub lgpl_2_1: ::std::option::Option<
-        SnykContainerLicensesPolicyOrgLicenseRulesLgpl21,
-    >,
+    pub lgpl_2_1: ::std::option::Option<SnykContainerLicensesPolicyOrgLicenseRulesLgpl21>,
     #[serde(
         rename = "LGPL-3.0",
         default,
         skip_serializing_if = "::std::option::Option::is_none"
     )]
-    pub lgpl_3_0: ::std::option::Option<
-        SnykContainerLicensesPolicyOrgLicenseRulesLgpl30,
-    >,
+    pub lgpl_3_0: ::std::option::Option<SnykContainerLicensesPolicyOrgLicenseRulesLgpl30>,
     #[serde(
         rename = "MPL-1.1",
         default,
@@ -4649,12 +4559,11 @@ pub struct SnykContainerLicensesPolicyOrgLicenseRules {
         default,
         skip_serializing_if = "::std::option::Option::is_none"
     )]
-    pub sim_pl_2_0: ::std::option::Option<
-        SnykContainerLicensesPolicyOrgLicenseRulesSimPl20,
-    >,
+    pub sim_pl_2_0: ::std::option::Option<SnykContainerLicensesPolicyOrgLicenseRulesSimPl20>,
 }
 impl ::std::convert::From<&SnykContainerLicensesPolicyOrgLicenseRules>
-for SnykContainerLicensesPolicyOrgLicenseRules {
+    for SnykContainerLicensesPolicyOrgLicenseRules
+{
     fn from(value: &SnykContainerLicensesPolicyOrgLicenseRules) -> Self {
         value.clone()
     }
@@ -4716,7 +4625,8 @@ pub struct SnykContainerLicensesPolicyOrgLicenseRulesAgpl10 {
     pub severity: ::std::option::Option<::std::string::String>,
 }
 impl ::std::convert::From<&SnykContainerLicensesPolicyOrgLicenseRulesAgpl10>
-for SnykContainerLicensesPolicyOrgLicenseRulesAgpl10 {
+    for SnykContainerLicensesPolicyOrgLicenseRulesAgpl10
+{
     fn from(value: &SnykContainerLicensesPolicyOrgLicenseRulesAgpl10) -> Self {
         value.clone()
     }
@@ -4765,7 +4675,8 @@ pub struct SnykContainerLicensesPolicyOrgLicenseRulesAgpl30 {
     pub severity: ::std::option::Option<::std::string::String>,
 }
 impl ::std::convert::From<&SnykContainerLicensesPolicyOrgLicenseRulesAgpl30>
-for SnykContainerLicensesPolicyOrgLicenseRulesAgpl30 {
+    for SnykContainerLicensesPolicyOrgLicenseRulesAgpl30
+{
     fn from(value: &SnykContainerLicensesPolicyOrgLicenseRulesAgpl30) -> Self {
         value.clone()
     }
@@ -4814,7 +4725,8 @@ pub struct SnykContainerLicensesPolicyOrgLicenseRulesArtistic10 {
     pub severity: ::std::option::Option<::std::string::String>,
 }
 impl ::std::convert::From<&SnykContainerLicensesPolicyOrgLicenseRulesArtistic10>
-for SnykContainerLicensesPolicyOrgLicenseRulesArtistic10 {
+    for SnykContainerLicensesPolicyOrgLicenseRulesArtistic10
+{
     fn from(value: &SnykContainerLicensesPolicyOrgLicenseRulesArtistic10) -> Self {
         value.clone()
     }
@@ -4863,7 +4775,8 @@ pub struct SnykContainerLicensesPolicyOrgLicenseRulesArtistic20 {
     pub severity: ::std::option::Option<::std::string::String>,
 }
 impl ::std::convert::From<&SnykContainerLicensesPolicyOrgLicenseRulesArtistic20>
-for SnykContainerLicensesPolicyOrgLicenseRulesArtistic20 {
+    for SnykContainerLicensesPolicyOrgLicenseRulesArtistic20
+{
     fn from(value: &SnykContainerLicensesPolicyOrgLicenseRulesArtistic20) -> Self {
         value.clone()
     }
@@ -4912,7 +4825,8 @@ pub struct SnykContainerLicensesPolicyOrgLicenseRulesCddl10 {
     pub severity: ::std::option::Option<::std::string::String>,
 }
 impl ::std::convert::From<&SnykContainerLicensesPolicyOrgLicenseRulesCddl10>
-for SnykContainerLicensesPolicyOrgLicenseRulesCddl10 {
+    for SnykContainerLicensesPolicyOrgLicenseRulesCddl10
+{
     fn from(value: &SnykContainerLicensesPolicyOrgLicenseRulesCddl10) -> Self {
         value.clone()
     }
@@ -4961,7 +4875,8 @@ pub struct SnykContainerLicensesPolicyOrgLicenseRulesCpol102 {
     pub severity: ::std::option::Option<::std::string::String>,
 }
 impl ::std::convert::From<&SnykContainerLicensesPolicyOrgLicenseRulesCpol102>
-for SnykContainerLicensesPolicyOrgLicenseRulesCpol102 {
+    for SnykContainerLicensesPolicyOrgLicenseRulesCpol102
+{
     fn from(value: &SnykContainerLicensesPolicyOrgLicenseRulesCpol102) -> Self {
         value.clone()
     }
@@ -5010,7 +4925,8 @@ pub struct SnykContainerLicensesPolicyOrgLicenseRulesEpl10 {
     pub severity: ::std::option::Option<::std::string::String>,
 }
 impl ::std::convert::From<&SnykContainerLicensesPolicyOrgLicenseRulesEpl10>
-for SnykContainerLicensesPolicyOrgLicenseRulesEpl10 {
+    for SnykContainerLicensesPolicyOrgLicenseRulesEpl10
+{
     fn from(value: &SnykContainerLicensesPolicyOrgLicenseRulesEpl10) -> Self {
         value.clone()
     }
@@ -5059,7 +4975,8 @@ pub struct SnykContainerLicensesPolicyOrgLicenseRulesGpl20 {
     pub severity: ::std::option::Option<::std::string::String>,
 }
 impl ::std::convert::From<&SnykContainerLicensesPolicyOrgLicenseRulesGpl20>
-for SnykContainerLicensesPolicyOrgLicenseRulesGpl20 {
+    for SnykContainerLicensesPolicyOrgLicenseRulesGpl20
+{
     fn from(value: &SnykContainerLicensesPolicyOrgLicenseRulesGpl20) -> Self {
         value.clone()
     }
@@ -5108,7 +5025,8 @@ pub struct SnykContainerLicensesPolicyOrgLicenseRulesGpl30 {
     pub severity: ::std::option::Option<::std::string::String>,
 }
 impl ::std::convert::From<&SnykContainerLicensesPolicyOrgLicenseRulesGpl30>
-for SnykContainerLicensesPolicyOrgLicenseRulesGpl30 {
+    for SnykContainerLicensesPolicyOrgLicenseRulesGpl30
+{
     fn from(value: &SnykContainerLicensesPolicyOrgLicenseRulesGpl30) -> Self {
         value.clone()
     }
@@ -5157,7 +5075,8 @@ pub struct SnykContainerLicensesPolicyOrgLicenseRulesLgpl20 {
     pub severity: ::std::option::Option<::std::string::String>,
 }
 impl ::std::convert::From<&SnykContainerLicensesPolicyOrgLicenseRulesLgpl20>
-for SnykContainerLicensesPolicyOrgLicenseRulesLgpl20 {
+    for SnykContainerLicensesPolicyOrgLicenseRulesLgpl20
+{
     fn from(value: &SnykContainerLicensesPolicyOrgLicenseRulesLgpl20) -> Self {
         value.clone()
     }
@@ -5206,7 +5125,8 @@ pub struct SnykContainerLicensesPolicyOrgLicenseRulesLgpl21 {
     pub severity: ::std::option::Option<::std::string::String>,
 }
 impl ::std::convert::From<&SnykContainerLicensesPolicyOrgLicenseRulesLgpl21>
-for SnykContainerLicensesPolicyOrgLicenseRulesLgpl21 {
+    for SnykContainerLicensesPolicyOrgLicenseRulesLgpl21
+{
     fn from(value: &SnykContainerLicensesPolicyOrgLicenseRulesLgpl21) -> Self {
         value.clone()
     }
@@ -5255,7 +5175,8 @@ pub struct SnykContainerLicensesPolicyOrgLicenseRulesLgpl30 {
     pub severity: ::std::option::Option<::std::string::String>,
 }
 impl ::std::convert::From<&SnykContainerLicensesPolicyOrgLicenseRulesLgpl30>
-for SnykContainerLicensesPolicyOrgLicenseRulesLgpl30 {
+    for SnykContainerLicensesPolicyOrgLicenseRulesLgpl30
+{
     fn from(value: &SnykContainerLicensesPolicyOrgLicenseRulesLgpl30) -> Self {
         value.clone()
     }
@@ -5304,7 +5225,8 @@ pub struct SnykContainerLicensesPolicyOrgLicenseRulesMpl11 {
     pub severity: ::std::option::Option<::std::string::String>,
 }
 impl ::std::convert::From<&SnykContainerLicensesPolicyOrgLicenseRulesMpl11>
-for SnykContainerLicensesPolicyOrgLicenseRulesMpl11 {
+    for SnykContainerLicensesPolicyOrgLicenseRulesMpl11
+{
     fn from(value: &SnykContainerLicensesPolicyOrgLicenseRulesMpl11) -> Self {
         value.clone()
     }
@@ -5353,7 +5275,8 @@ pub struct SnykContainerLicensesPolicyOrgLicenseRulesMpl20 {
     pub severity: ::std::option::Option<::std::string::String>,
 }
 impl ::std::convert::From<&SnykContainerLicensesPolicyOrgLicenseRulesMpl20>
-for SnykContainerLicensesPolicyOrgLicenseRulesMpl20 {
+    for SnykContainerLicensesPolicyOrgLicenseRulesMpl20
+{
     fn from(value: &SnykContainerLicensesPolicyOrgLicenseRulesMpl20) -> Self {
         value.clone()
     }
@@ -5402,7 +5325,8 @@ pub struct SnykContainerLicensesPolicyOrgLicenseRulesMsRl {
     pub severity: ::std::option::Option<::std::string::String>,
 }
 impl ::std::convert::From<&SnykContainerLicensesPolicyOrgLicenseRulesMsRl>
-for SnykContainerLicensesPolicyOrgLicenseRulesMsRl {
+    for SnykContainerLicensesPolicyOrgLicenseRulesMsRl
+{
     fn from(value: &SnykContainerLicensesPolicyOrgLicenseRulesMsRl) -> Self {
         value.clone()
     }
@@ -5451,7 +5375,8 @@ pub struct SnykContainerLicensesPolicyOrgLicenseRulesSimPl20 {
     pub severity: ::std::option::Option<::std::string::String>,
 }
 impl ::std::convert::From<&SnykContainerLicensesPolicyOrgLicenseRulesSimPl20>
-for SnykContainerLicensesPolicyOrgLicenseRulesSimPl20 {
+    for SnykContainerLicensesPolicyOrgLicenseRulesSimPl20
+{
     fn from(value: &SnykContainerLicensesPolicyOrgLicenseRulesSimPl20) -> Self {
         value.clone()
     }
@@ -6387,7 +6312,8 @@ pub struct VulnerabilitiesItemCvssDetailsItem {
     pub severity: ::std::option::Option<::std::string::String>,
 }
 impl ::std::convert::From<&VulnerabilitiesItemCvssDetailsItem>
-for VulnerabilitiesItemCvssDetailsItem {
+    for VulnerabilitiesItemCvssDetailsItem
+{
     fn from(value: &VulnerabilitiesItemCvssDetailsItem) -> Self {
         value.clone()
     }
@@ -6470,7 +6396,8 @@ pub struct VulnerabilitiesItemCvssSourcesItem {
     pub vector: ::std::option::Option<::std::string::String>,
 }
 impl ::std::convert::From<&VulnerabilitiesItemCvssSourcesItem>
-for VulnerabilitiesItemCvssSourcesItem {
+    for VulnerabilitiesItemCvssSourcesItem
+{
     fn from(value: &VulnerabilitiesItemCvssSourcesItem) -> Self {
         value.clone()
     }
@@ -6522,8 +6449,7 @@ pub struct VulnerabilitiesItemEpssDetails {
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub probability: ::std::option::Option<::std::string::String>,
 }
-impl ::std::convert::From<&VulnerabilitiesItemEpssDetails>
-for VulnerabilitiesItemEpssDetails {
+impl ::std::convert::From<&VulnerabilitiesItemEpssDetails> for VulnerabilitiesItemEpssDetails {
     fn from(value: &VulnerabilitiesItemEpssDetails) -> Self {
         value.clone()
     }
@@ -6576,14 +6502,13 @@ pub struct VulnerabilitiesItemExploitDetails {
         default,
         skip_serializing_if = "::std::vec::Vec::is_empty"
     )]
-    pub maturity_levels: ::std::vec::Vec<
-        VulnerabilitiesItemExploitDetailsMaturityLevelsItem,
-    >,
+    pub maturity_levels: ::std::vec::Vec<VulnerabilitiesItemExploitDetailsMaturityLevelsItem>,
     #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
     pub sources: ::std::vec::Vec<::serde_json::Value>,
 }
 impl ::std::convert::From<&VulnerabilitiesItemExploitDetails>
-for VulnerabilitiesItemExploitDetails {
+    for VulnerabilitiesItemExploitDetails
+{
     fn from(value: &VulnerabilitiesItemExploitDetails) -> Self {
         value.clone()
     }
@@ -6631,7 +6556,8 @@ pub struct VulnerabilitiesItemExploitDetailsMaturityLevelsItem {
     pub type_: ::std::option::Option<::std::string::String>,
 }
 impl ::std::convert::From<&VulnerabilitiesItemExploitDetailsMaturityLevelsItem>
-for VulnerabilitiesItemExploitDetailsMaturityLevelsItem {
+    for VulnerabilitiesItemExploitDetailsMaturityLevelsItem
+{
     fn from(value: &VulnerabilitiesItemExploitDetailsMaturityLevelsItem) -> Self {
         value.clone()
     }
@@ -6674,13 +6600,20 @@ impl ::std::default::Default for VulnerabilitiesItemExploitDetailsMaturityLevels
 /// </details>
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
 pub struct VulnerabilitiesItemIdentifiers {
-    #[serde(rename = "CVE", default, skip_serializing_if = "::std::vec::Vec::is_empty")]
+    #[serde(
+        rename = "CVE",
+        default,
+        skip_serializing_if = "::std::vec::Vec::is_empty"
+    )]
     pub cve: ::std::vec::Vec<::std::string::String>,
-    #[serde(rename = "CWE", default, skip_serializing_if = "::std::vec::Vec::is_empty")]
+    #[serde(
+        rename = "CWE",
+        default,
+        skip_serializing_if = "::std::vec::Vec::is_empty"
+    )]
     pub cwe: ::std::vec::Vec<::std::string::String>,
 }
-impl ::std::convert::From<&VulnerabilitiesItemIdentifiers>
-for VulnerabilitiesItemIdentifiers {
+impl ::std::convert::From<&VulnerabilitiesItemIdentifiers> for VulnerabilitiesItemIdentifiers {
     fn from(value: &VulnerabilitiesItemIdentifiers) -> Self {
         value.clone()
     }
@@ -6759,7 +6692,8 @@ pub struct VulnerabilitiesItemMavenModuleName {
     pub group_id: ::std::option::Option<::std::string::String>,
 }
 impl ::std::convert::From<&VulnerabilitiesItemMavenModuleName>
-for VulnerabilitiesItemMavenModuleName {
+    for VulnerabilitiesItemMavenModuleName
+{
     fn from(value: &VulnerabilitiesItemMavenModuleName) -> Self {
         value.clone()
     }
@@ -6798,7 +6732,8 @@ pub struct VulnerabilitiesItemReferencesItem {
     pub url: ::std::option::Option<::std::string::String>,
 }
 impl ::std::convert::From<&VulnerabilitiesItemReferencesItem>
-for VulnerabilitiesItemReferencesItem {
+    for VulnerabilitiesItemReferencesItem
+{
     fn from(value: &VulnerabilitiesItemReferencesItem) -> Self {
         value.clone()
     }

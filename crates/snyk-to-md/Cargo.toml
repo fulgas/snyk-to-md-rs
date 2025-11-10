@@ -2,12 +2,14 @@
 name = "snyk-to-md"
 version = "0.1.0"
 edition = "2021"
-authors = ["Nelson Silva <nelson.emanuel.silva@>"]
+authors = ["Nelson Silva <nelson.emanuel.silva@gmail.com>"]
 description = "A CLI to convert Snyk JSON reports into unified Markdown files."
 license = "MIT OR Apache-2.0"
 repository = "https://github.com/fulgas/snyk-to-md"
 keywords = ["snyk", "markdown", "vulnerability", "cli"]
 categories = ["command-line-utilities"]
+readme = "README.md"
+rust-version = "1.90"
 
 [[bin]]
 name = "snyk-to-md"

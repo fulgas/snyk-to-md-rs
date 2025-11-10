@@ -1,9 +1,9 @@
 use crate::model::security_report::{
     ProjectType, SecurityProject, SecurityReport, Severity, Vulnerability, VulnerabilitySummary,
 };
-use crate::parser::container::SnykContainer;
 use crate::parser::{Parser, ParserError};
 use anyhow::Result;
+use serde_snyk_container::{SnykContainer, VulnerabilitiesItem};
 use std::collections::HashMap;
 
 pub(crate) struct SnykContainerParser;
@@ -77,7 +77,7 @@ impl Parser for SnykContainerParser {
 
 /// Parses vulnerabilities and deduplicates by ID, merging duplicate information
 fn parse_and_deduplicate_vulnerabilities(
-    vulns: &[crate::parser::container::VulnerabilitiesItem],
+    vulns: &[VulnerabilitiesItem],
     expected_unique_count: usize,
 ) -> Vec<Vulnerability> {
     let mut vuln_map: HashMap<String, Vulnerability> = HashMap::new();

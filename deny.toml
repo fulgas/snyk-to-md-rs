@@ -12,7 +12,7 @@ exceptions = [
 ]
 
 [bans]
-multiple-versions = "allow"
+multiple-versions = "deny"
 wildcards = "allow"
 
 [sources]

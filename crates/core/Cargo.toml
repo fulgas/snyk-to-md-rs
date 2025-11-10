@@ -2,21 +2,22 @@
 name = "snyk-to-md-core"
 version = "0.1.0"
 edition = "2021"
-authors = ["Nelson Silva <nelson.emanuel.silva@>"]
+authors = ["Nelson Silva <nelson.emanuel.silva@gmail.com>"]
 description = "A powerful CLI tool to convert Snyk JSON security reports into human-readable Markdown documents."
 license = "MIT OR Apache-2.0"
-repository = "https://github.com/fulgas/snyk-to-md"
-homepage = "https://github.com/fulgas/snyk-to-md"
+repository = "https://github.com/fulgas/snyk-to-md-rs"
+homepage = "https://github.com/fulgas/snyk-to-md-rs"
 keywords = ["snyk", "security", "vulnerability", "markdown", "reporting"]
 categories = ["command-line-utilities", "development-tools"]
 readme = "README.md"
-
+rust-version = "1.90"
 
 [lib]
 name = "snyk_to_md_core"
 path = "src/lib.rs"
 
 [dependencies]
+serde_snyk_container = { path = "../serde_snyk_container" }
 anyhow = "1.0.100"
 serde = { version = "1.0.228", features = ["derive", "default"] }
 serde_json = "1.0.145"
@@ -27,10 +28,3 @@ thiserror = "2.0.17"
 
 [dev-dependencies]
 tempfile = "3.8"
-
-[build-dependencies]
-prettyplease = "0.2.37"
-serde = { version = "1.0.228"}
-serde_json = "1.0.145"
-syn = "2.0.109"
-typify = { version = "0.5.0"}

@@ -553,6 +553,17 @@ dependencies = [
 ]
 
 [[package]]
+name = "serde_snyk_container"
+version = "0.1.0"
+dependencies = [
+ "prettyplease",
+ "serde",
+ "serde_json",
+ "syn",
+ "typify",
+]
+
+[[package]]
 name = "serde_tokenstream"
 version = "0.2.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -586,14 +597,12 @@ dependencies = [
  "anyhow",
  "askama",
  "chrono",
- "prettyplease",
  "serde",
  "serde_json",
+ "serde_snyk_container",
  "svg",
- "syn",
  "tempfile",
  "thiserror",
- "typify",
 ]
 
 [[package]]
