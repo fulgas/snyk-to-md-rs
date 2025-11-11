@@ -1,10 +1,15 @@
-use crate::model::security_report::SecurityReport;
-use crate::parser::code::SnykCodeParser;
-use crate::parser::container::container_parser::SnykContainerParser;
+use crate::parser::json::JsonParserFactory;
+use crate::parser::sarif::SarifParserFactory;
 use anyhow::Result;
 
-mod code;
-mod container;
+pub(crate) mod json;
+pub(crate) mod sarif;
+
+#[derive(Clone, Debug)]
+pub enum ParserFormat {
+    Json,
+    Sarif,
+}
 
 #[derive(Clone, Debug)]
 pub enum ParserType {
@@ -18,17 +23,26 @@ pub enum ParserError {
     JsonError(#[from] serde_json::Error),
 }
 
-pub(crate) trait Parser {
-    fn parse(&self, content: &str) -> Result<SecurityReport, ParserError>;
+pub enum ParsedReport {
+    Container(Box<serde_snyk_container::SnykContainer>),
+    Code(String),
 }
 
-pub(crate) struct ParserFactory;
+pub(crate) trait Parser {
+    fn parse(&self, content: &str) -> Result<ParsedReport, ParserError>;
+}
 
-impl ParserFactory {
-    pub fn create_parser(report_type: ParserType) -> Box<dyn Parser> {
-        match report_type {
-            ParserType::Container => Box::new(SnykContainerParser),
-            ParserType::Code => Box::new(SnykCodeParser),
+pub(crate) struct ParserFormatFactory;
+
+impl ParserFormatFactory {
+    pub(crate) fn create_parser_format(parser_format: &ParserFormat) -> Box<dyn ParserTypeFactory> {
+        match parser_format {
+            ParserFormat::Json => Box::new(JsonParserFactory),
+            ParserFormat::Sarif => Box::new(SarifParserFactory),
         }
     }
+}
+
+pub(crate) trait ParserTypeFactory {
+    fn create_parser(&self, parser_type: ParserType) -> Box<dyn Parser>;
 }

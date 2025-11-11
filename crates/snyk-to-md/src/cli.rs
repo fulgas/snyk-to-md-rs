@@ -1,6 +1,6 @@
 use clap::{Parser, Subcommand, ValueEnum};
 use snyk_to_md_core::markdown::MarkdownFormat;
-use snyk_to_md_core::parser::ParserType;
+use snyk_to_md_core::parser::{ParserFormat, ParserType};
 use std::path::PathBuf;
 
 #[derive(Debug, Clone, Subcommand, ValueEnum)]
@@ -14,6 +14,23 @@ impl From<CliParserType> for ParserType {
         match cli_type {
             CliParserType::Container => ParserType::Container,
             CliParserType::Code => ParserType::Code,
+        }
+    }
+}
+
+#[derive(Debug, Clone, ValueEnum)]
+pub(crate) enum CliInputFormat {
+    #[value(name = "json")]
+    Json,
+    #[value(name = "sarif")]
+    Sarif,
+}
+
+impl From<CliInputFormat> for ParserFormat {
+    fn from(cli_type: CliInputFormat) -> Self {
+        match cli_type {
+            CliInputFormat::Json => ParserFormat::Json,
+            CliInputFormat::Sarif => ParserFormat::Sarif,
         }
     }
 }
@@ -42,15 +59,18 @@ pub(crate) struct Cli {
     #[command(subcommand)]
     pub(crate) command: CliParserType,
 
-    #[arg(short, long, value_parser, default_value = "CommonMark")]
-    pub(crate) format: CliOutputFormat,
+    #[arg(short = 't', long, value_parser, default_value = "json")]
+    pub(crate) input_format: CliInputFormat,
 
-    #[arg(short, long)]
+    #[arg(short = 'f', long, value_parser, default_value = "CommonMark")]
+    pub(crate) output_format: CliOutputFormat,
+
+    #[arg(short = 'i', long)]
     pub(crate) input: PathBuf,
 
-    #[arg(short, long)]
+    #[arg(short = 'o', long)]
     pub(crate) output: Option<PathBuf>,
 
-    #[arg(short, long, default_value = "false")]
+    #[arg(short = 'e', long, default_value = "false")]
     pub(crate) with_emoji: bool,
 }

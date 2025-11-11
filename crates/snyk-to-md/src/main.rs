@@ -14,7 +14,8 @@ fn main() -> anyhow::Result<()> {
 
     let markdown_report = ReportProcessorBuilder::new()
         .parser_type(cli.command.into())
-        .markdown_format(cli.format.into())
+        .parser_format(cli.input_format.into())
+        .markdown_format(cli.output_format.into())
         .with_emoji(cli.with_emoji)
         .content(&json_content)
         .build()

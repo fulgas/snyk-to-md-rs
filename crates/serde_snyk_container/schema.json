@@ -1088,7 +1088,10 @@
           "disclosureTime": {
             "type": "string"
           }
-        }
+        },
+        "required" : [
+          "severity"
+        ]
       }
     },
     "ignoreSettings": {

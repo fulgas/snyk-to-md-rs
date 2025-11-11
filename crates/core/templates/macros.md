@@ -29,3 +29,13 @@
 {{ project_name }}
 {%- endif -%}
 {%- endmacro -%}
+
+{%- macro format_path(path) -%}
+{%- for path in paths -%}
+    {%- if loop.first -%}
+        {{- path ~ " → " -}}
+    {%- else -%}
+        {{- path -}}
+    {%- endif -%}
+{%- endfor -%}
+{%- endmacro -%}

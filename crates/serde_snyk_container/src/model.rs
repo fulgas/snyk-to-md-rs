@@ -5399,6 +5399,9 @@ impl ::std::default::Default for SnykContainerLicensesPolicyOrgLicenseRulesSimPl
 ///  "type": "array",
 ///  "items": {
 ///    "type": "object",
+///    "required": [
+///      "severity"
+///    ],
 ///    "properties": {
 ///      "CVSSv3": {
 ///        "type": "string"
@@ -5717,6 +5720,9 @@ impl ::std::convert::From<::std::vec::Vec<VulnerabilitiesItem>> for Vulnerabilit
 /// ```json
 ///{
 ///  "type": "object",
+///  "required": [
+///    "severity"
+///  ],
 ///  "properties": {
 ///    "CVSSv3": {
 ///      "type": "string"
@@ -6171,8 +6177,7 @@ pub struct VulnerabilitiesItem {
     pub relative_importance: ::std::option::Option<::std::string::String>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub semver: ::std::option::Option<VulnerabilitiesItemSemver>,
-    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
-    pub severity: ::std::option::Option<::std::string::String>,
+    pub severity: ::std::string::String,
     #[serde(
         rename = "severityBasedOn",
         default,
@@ -6205,58 +6210,6 @@ pub struct VulnerabilitiesItem {
 impl ::std::convert::From<&VulnerabilitiesItem> for VulnerabilitiesItem {
     fn from(value: &VulnerabilitiesItem) -> Self {
         value.clone()
-    }
-}
-impl ::std::default::Default for VulnerabilitiesItem {
-    fn default() -> Self {
-        Self {
-            alternative_ids: Default::default(),
-            cpes: Default::default(),
-            creation_time: Default::default(),
-            credit: Default::default(),
-            cvs_sv3: Default::default(),
-            cvss_details: Default::default(),
-            cvss_score: Default::default(),
-            cvss_sources: Default::default(),
-            description: Default::default(),
-            disclosure_time: Default::default(),
-            docker_base_image: Default::default(),
-            epss_details: Default::default(),
-            exploit: Default::default(),
-            exploit_details: Default::default(),
-            fixed_in: Default::default(),
-            from: Default::default(),
-            functions: Default::default(),
-            functions_new: Default::default(),
-            id: Default::default(),
-            identifiers: Default::default(),
-            insights: Default::default(),
-            is_disputed: Default::default(),
-            is_patchable: Default::default(),
-            is_upgradable: Default::default(),
-            language: Default::default(),
-            malicious: Default::default(),
-            maven_module_name: Default::default(),
-            modification_time: Default::default(),
-            module_name: Default::default(),
-            name: Default::default(),
-            nvd_severity: Default::default(),
-            package_manager: Default::default(),
-            package_name: Default::default(),
-            patches: Default::default(),
-            proprietary: Default::default(),
-            publication_time: Default::default(),
-            references: Default::default(),
-            relative_importance: Default::default(),
-            semver: Default::default(),
-            severity: Default::default(),
-            severity_based_on: Default::default(),
-            severity_with_critical: Default::default(),
-            social_trend_alert: Default::default(),
-            title: Default::default(),
-            upgrade_path: Default::default(),
-            version: Default::default(),
-        }
     }
 }
 ///`VulnerabilitiesItemCvssDetailsItem`
